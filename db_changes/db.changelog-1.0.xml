@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <!--
+    <changeSet id="common-identity-api-1.0" author="hoangtm">
+
+        <createTable tableName="identities">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+
+            <column name="email" type="VARCHAR(100)"/>
+            <column name="block" type="BOOLEAN"/>
+            <column name="mog_id" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="system_role" type="VARCHAR(100)"/>
+            <column name="linked_entity_id" type="VARCHAR(255)"/>
+            <column name="roles" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="affiliators">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+
+            <column name="identity_id" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(100)"/>
+            <column name="username" type="VARCHAR(100)"/>
+            <column name="groups" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="managers">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+
+            <column name="identity_id" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(100)"/>
+            <column name="username" type="VARCHAR(100)"/>
+            <column name="groups" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="communities">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+
+            <column name="identity_id" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(100)"/>
+            <column name="username" type="VARCHAR(100)"/>
+            <column name="groups" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="affiliator_managers">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+
+            <column name="identity_id" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(100)"/>
+            <column name="username" type="VARCHAR(100)"/>
+            <column name="groups" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="admins">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+
+            <column name="identity_id" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(100)"/>
+            <column name="username" type="VARCHAR(100)"/>
+            <column name="groups" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="roles">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+
+            <column name="name" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+            <column name="label" type="VARCHAR(100)"/>
+        </createTable>
+
+        <createTable tableName="permissions">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+
+            <column name="name" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="applications">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+
+            <column name="name" type="VARCHAR(100)">
+                <constraints unique="true"/>
+            </column>
+            <column name="description" type="VARCHAR(255)"/>
+        </createTable>
+
+        <createTable tableName="mwork_connect_tokens">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+
+            <column name="identity_id" type="VARCHAR(255)"/>
+            <column name="identity_email" type="VARCHAR(100)"/>
+        </createTable>
+
+        <createTable tableName="access_tokens">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+            <column name="identity_id" type="VARCHAR(255)"/>
+            <column name="identity_email" type="VARCHAR(100)"/>
+            <column name="app_id" type="VARCHAR(255)"/>
+            <column name="app_name" type="VARCHAR(255)"/>
+            <column name="auth_type" type="VARCHAR(100)"/>
+            <column name="original_token" type="VARCHAR(255)"/>
+            <column name="expired_time" type="BIGINT"/>
+            <column name="scopes" type="VARCHAR(255)"/>
+        </createTable>
+
+
+    </changeSet>
+
+    <changeSet id="common-identity-api-1.1" author="hoangtm">
+        <addColumn tableName="roles">
+            <column name="permissions" type="VARCHAR(1000)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="common-identity-api-1.2" author="hoangtm">
+        <createTable tableName="manufacturers">
+            <column name="id" type="VARCHAR(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="created" type="BIGINT"/>
+            <column name="updated" type="BIGINT"/>
+            <column name="deleted" type="BIGINT"/>
+
+            <column name="identity_id" type="VARCHAR(255)">
+                <constraints unique="true"/>
+            </column>
+            <column name="email" type="VARCHAR(100)"/>
+            <column name="username" type="VARCHAR(100)"/>
+            <column name="groups" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    -->
+
+</databaseChangeLog>
