@@ -105,11 +105,11 @@ public class DataLoader {
                 dpSales.add(dpsRecord);
 
                 DOMSale doms = new DOMSale();
-                doms.firstSaleDOM.set(DateUtil.extractDOM(fsd));
-                doms.secondSaleDOM.set(DateUtil.extractDOM(ssd));
-                doms.thirdSaleDOM.set(DateUtil.extractDOM(tsd));
-                doms.fourthSaleDOM.set(DateUtil.extractDOM(fosd));
-                doms.fifthSaleDOM.set(DateUtil.extractDOM(fisd));
+                doms.firstSaleDom.set(DateUtil.extractDOM(fsd));
+                doms.secondSaleDom.set(DateUtil.extractDOM(ssd));
+                doms.thirdSaleDom.set(DateUtil.extractDOM(tsd));
+                doms.fourthSaleDom.set(DateUtil.extractDOM(fosd));
+                doms.fifthSaleDom.set(DateUtil.extractDOM(fisd));
 
                 domSales.add(doms);
             }

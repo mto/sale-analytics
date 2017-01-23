@@ -81,7 +81,7 @@ public class SAnalytics extends Application {
         Tab yellowTab = new Tab("Yellow");
         final DOMSaleView domsv = new DOMSaleView();
         final ObservableList<DOMSale> domsvData = FXCollections.observableArrayList(dbLoader.getDOMSales());
-        dpsv.setItems(dpsvData);
+        domsv.setItems(domsvData);
 
         Button domsvButton = new Button("Export");
         dpsvButton.setOnAction(new EventHandler<ActionEvent>() {

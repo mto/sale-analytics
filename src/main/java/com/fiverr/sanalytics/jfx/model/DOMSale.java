@@ -8,34 +8,34 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class DOMSale {
 
-    public SimpleStringProperty firstSaleDOM = new SimpleStringProperty();
+    public SimpleStringProperty firstSaleDom = new SimpleStringProperty();
 
-    public SimpleStringProperty secondSaleDOM = new SimpleStringProperty();
+    public SimpleStringProperty secondSaleDom = new SimpleStringProperty();
 
-    public SimpleStringProperty thirdSaleDOM = new SimpleStringProperty();
+    public SimpleStringProperty thirdSaleDom = new SimpleStringProperty();
 
-    public SimpleStringProperty fourthSaleDOM = new SimpleStringProperty();
+    public SimpleStringProperty fourthSaleDom = new SimpleStringProperty();
 
-    public SimpleStringProperty fifthSaleDOM = new SimpleStringProperty();
+    public SimpleStringProperty fifthSaleDom = new SimpleStringProperty();
 
-    public String getFirstSaleDOM() {
-        return firstSaleDOM.getValue();
+    public String getFirstSaleDom() {
+        return firstSaleDom.getValue();
     }
 
-    public String getSecondSaleDOM() {
-        return secondSaleDOM.getValue();
+    public String getSecondSaleDom() {
+        return secondSaleDom.getValue();
     }
 
-    public String getThirdSaleDOM() {
-        return thirdSaleDOM.getValue();
+    public String getThirdSaleDom() {
+        return thirdSaleDom.getValue();
     }
 
-    public String getFourthSaleDOM() {
-        return fourthSaleDOM.getValue();
+    public String getFourthSaleDom() {
+        return fourthSaleDom.getValue();
     }
 
-    public String getFifthSaleDOM() {
-        return fifthSaleDOM.getValue();
+    public String getFifthSaleDom() {
+        return fifthSaleDom.getValue();
     }
 
 }
