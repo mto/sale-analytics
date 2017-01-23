@@ -1,6 +1,6 @@
 package com.fiverr.sanalytics.jfx.model;
 
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 /**
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
@@ -8,34 +8,34 @@ import javafx.beans.property.SimpleIntegerProperty;
  */
 public class DOWSale {
 
-    public SimpleIntegerProperty firstSaleDOW = new SimpleIntegerProperty();
+    public SimpleStringProperty firstSaleDow = new SimpleStringProperty();
 
-    public SimpleIntegerProperty secondSaleDOW = new SimpleIntegerProperty();
+    public SimpleStringProperty secondSaleDow = new SimpleStringProperty();
 
-    public SimpleIntegerProperty thirdSaleDOW = new SimpleIntegerProperty();
+    public SimpleStringProperty thirdSaleDow = new SimpleStringProperty();
 
-    public SimpleIntegerProperty fourthSaleDOW = new SimpleIntegerProperty();
+    public SimpleStringProperty fourthSaleDow = new SimpleStringProperty();
 
-    public SimpleIntegerProperty fifthSaleDOW = new SimpleIntegerProperty();
+    public SimpleStringProperty fifthSaleDow = new SimpleStringProperty();
 
-    public Integer getFirstSaleDOW() {
-        return firstSaleDOW.getValue();
+    public String getFirstSaleDow() {
+        return firstSaleDow.getValue();
     }
 
-    public Integer getSecondSaleDOW() {
-        return secondSaleDOW.getValue();
+    public String getSecondSaleDow() {
+        return secondSaleDow.getValue();
     }
 
-    public Integer getThirdSaleDOW() {
-        return thirdSaleDOW.getValue();
+    public String getThirdSaleDow() {
+        return thirdSaleDow.getValue();
     }
 
-    public Integer getFourthSaleDOW() {
-        return fourthSaleDOW.getValue();
+    public String getFourthSaleDow() {
+        return fourthSaleDow.getValue();
     }
 
-    public Integer getFifthSaleDOW() {
-        return fifthSaleDOW.getValue();
+    public String getFifthSaleDow() {
+        return fifthSaleDow.getValue();
     }
 
 }

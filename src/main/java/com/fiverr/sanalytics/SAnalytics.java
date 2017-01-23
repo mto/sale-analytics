@@ -1,8 +1,10 @@
 package com.fiverr.sanalytics;
 
 import com.fiverr.sanalytics.jfx.model.DOMSale;
+import com.fiverr.sanalytics.jfx.model.DOWSale;
 import com.fiverr.sanalytics.jfx.model.DPSale;
 import com.fiverr.sanalytics.jfx.view.DOMSaleView;
+import com.fiverr.sanalytics.jfx.view.DOWSaleView;
 import com.fiverr.sanalytics.service.DataLoader;
 import com.fiverr.sanalytics.jfx.view.DPSaleView;
 import javafx.application.Application;
@@ -76,8 +78,34 @@ public class SAnalytics extends Application {
         Tab finalTab = new Tab("Final");
         Tab blueTab = new Tab("Blue");
         Tab redTab = new Tab("Red");
-        Tab greenTab = new Tab("Green");
 
+        /* Setup Green tab */
+        Tab greenTab = new Tab("Green");
+        final DOWSaleView dowsv = new DOWSaleView();
+        final ObservableList<DOWSale> dowsvData = FXCollections.observableArrayList(dbLoader.getDOWSales());
+        dowsv.setItems(dowsvData);
+
+        Button dowsvButton = new Button("Export");
+        dpsvButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                FileChooser fc = new FileChooser();
+                fc.setTitle("Export data to Excel");
+                File f = fc.showSaveDialog(primaryStage);
+                if(f!= null && f.getName().endsWith(".xlsx")){
+                    dowsv.exportToFile(f);
+                }
+            }
+        });
+
+        VBox greenBox = new VBox();
+        greenBox.setSpacing(5);
+        greenBox.setPadding(new Insets(10, 0, 0, 10));
+        greenBox.getChildren().addAll(dowsv, dowsvButton);
+
+        greenTab.setContent(greenBox);
+
+        /* Setup Yello tab */
         Tab yellowTab = new Tab("Yellow");
         final DOMSaleView domsv = new DOMSaleView();
         final ObservableList<DOMSale> domsvData = FXCollections.observableArrayList(dbLoader.getDOMSales());
@@ -100,7 +128,6 @@ public class SAnalytics extends Application {
         ylBox.setSpacing(5);
         ylBox.setPadding(new Insets(10, 0, 0, 10));
         ylBox.getChildren().addAll(domsv, domsvButton);
-
         yellowTab.setContent(ylBox);
 
 

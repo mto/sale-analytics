@@ -16,19 +16,19 @@ public class DOMSaleView extends TableView<DOMSale> implements Exportable {
     public DOMSaleView() {
         super();
 
-        TableColumn<DOMSale, String> dow1 = new TableColumn<DOMSale, String>("DOM1");
-        TableColumn<DOMSale, String> dow2 = new TableColumn<DOMSale, String>("DOM2");
-        TableColumn<DOMSale, String> dow3 = new TableColumn<DOMSale, String>("DOM3");
-        TableColumn<DOMSale, String> dow4 = new TableColumn<DOMSale, String>("DOM4");
-        TableColumn<DOMSale, String> dow5 = new TableColumn<DOMSale, String>("DOM5");
+        TableColumn<DOMSale, String> dom1 = new TableColumn<DOMSale, String>("DOM1");
+        TableColumn<DOMSale, String> dom2 = new TableColumn<DOMSale, String>("DOM2");
+        TableColumn<DOMSale, String> dom3 = new TableColumn<DOMSale, String>("DOM3");
+        TableColumn<DOMSale, String> dom4 = new TableColumn<DOMSale, String>("DOM4");
+        TableColumn<DOMSale, String> dom5 = new TableColumn<DOMSale, String>("DOM5");
 
-        dow1.setCellValueFactory(new PropertyValueFactory<DOMSale, String>("firstSaleDom"));
-        dow2.setCellValueFactory(new PropertyValueFactory<DOMSale, String>("secondSaleDom"));
-        dow3.setCellValueFactory(new PropertyValueFactory<DOMSale, String>("thirdSaleDom"));
-        dow4.setCellValueFactory(new PropertyValueFactory<DOMSale, String>("fourthSaleDom"));
-        dow5.setCellValueFactory(new PropertyValueFactory<DOMSale, String>("fifthSaleDom"));
+        dom1.setCellValueFactory(new PropertyValueFactory<DOMSale, String>("firstSaleDom"));
+        dom2.setCellValueFactory(new PropertyValueFactory<DOMSale, String>("secondSaleDom"));
+        dom3.setCellValueFactory(new PropertyValueFactory<DOMSale, String>("thirdSaleDom"));
+        dom4.setCellValueFactory(new PropertyValueFactory<DOMSale, String>("fourthSaleDom"));
+        dom5.setCellValueFactory(new PropertyValueFactory<DOMSale, String>("fifthSaleDom"));
 
-        getColumns().addAll(dow1, dow2, dow3, dow4, dow5);
+        getColumns().addAll(dom1, dom2, dom3, dom4, dom5);
     }
 
     @Override

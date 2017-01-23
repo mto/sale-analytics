@@ -1,6 +1,7 @@
 package com.fiverr.sanalytics.service;
 
 import com.fiverr.sanalytics.jfx.model.DOMSale;
+import com.fiverr.sanalytics.jfx.model.DOWSale;
 import com.fiverr.sanalytics.jfx.model.DPSale;
 import com.fiverr.sanalytics.util.DateUtil;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
@@ -27,9 +28,11 @@ public class DataLoader {
 
     private final ComboPooledDataSource comboDS;
 
-    private List<DPSale> dpSales = new ArrayList<DPSale>();
+    private final List<DPSale> dpSales = new ArrayList<DPSale>();
 
-    private List<DOMSale> domSales = new ArrayList<DOMSale>();
+    private final List<DOMSale> domSales = new ArrayList<DOMSale>();
+
+    private final List<DOWSale> dowSales = new ArrayList<DOWSale>();
     
     private DataLoader(){
         comboDS = new ComboPooledDataSource();
@@ -112,6 +115,16 @@ public class DataLoader {
                 doms.fifthSaleDom.set(DateUtil.extractDOM(fisd));
 
                 domSales.add(doms);
+
+                DOWSale dows = new DOWSale();
+                dows.firstSaleDow.set(DateUtil.extractDOW(fsd));
+                dows.secondSaleDow.set(DateUtil.extractDOW(ssd));
+                dows.thirdSaleDow.set(DateUtil.extractDOW(tsd));
+                dows.fourthSaleDow.set(DateUtil.extractDOW(fosd));
+                dows.fifthSaleDow.set(DateUtil.extractDOW(fisd));
+
+                dowSales.add(dows);
+
             }
         }catch (Exception ex){
             ex.printStackTrace();
@@ -128,5 +141,11 @@ public class DataLoader {
         loadDPSales();
 
         return Collections.unmodifiableList(domSales);
+    }
+
+    public List<DOWSale> getDOWSales(){
+        loadDPSales();
+
+        return Collections.unmodifiableList(dowSales);
     }
 }
