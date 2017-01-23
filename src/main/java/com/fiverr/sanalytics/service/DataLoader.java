@@ -80,8 +80,13 @@ public class DataLoader {
 
             result = pstmt.executeQuery();
 
+            int index = 0;
+
             while(result.next()){
+                index++;
+
                 DPSale dpsRecord = new DPSale();
+                dpsRecord.index.set(index);
                 dpsRecord.dealerNumber.set(result.getString("dealer_number"));
                 dpsRecord.partNumber.set(result.getString("part_number"));
 
@@ -108,6 +113,7 @@ public class DataLoader {
                 dpSales.add(dpsRecord);
 
                 DOMSale doms = new DOMSale();
+                doms.index.set(index);
                 doms.firstSaleDom.set(DateUtil.extractDOM(fsd));
                 doms.secondSaleDom.set(DateUtil.extractDOM(ssd));
                 doms.thirdSaleDom.set(DateUtil.extractDOM(tsd));
@@ -117,6 +123,7 @@ public class DataLoader {
                 domSales.add(doms);
 
                 DOWSale dows = new DOWSale();
+                dows.index.set(index);
                 dows.firstSaleDow.set(DateUtil.extractDOW(fsd));
                 dows.secondSaleDow.set(DateUtil.extractDOW(ssd));
                 dows.thirdSaleDow.set(DateUtil.extractDOW(tsd));

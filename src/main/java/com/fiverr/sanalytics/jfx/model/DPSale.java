@@ -9,6 +9,8 @@ import javafx.beans.property.SimpleStringProperty;
  */
 public class DPSale {
 
+    public SimpleIntegerProperty index = new SimpleIntegerProperty();
+
     public SimpleStringProperty dealerNumber = new SimpleStringProperty();
 
     public SimpleStringProperty partNumber = new SimpleStringProperty();
@@ -89,6 +91,10 @@ public class DPSale {
 
     public Integer getFifthSaleAmount() {
         return fifthSaleAmount.getValue();
+    }
+
+    public Integer getIndex(){
+        return index.getValue();
     }
 
 }

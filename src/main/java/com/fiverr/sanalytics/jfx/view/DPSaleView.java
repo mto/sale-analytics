@@ -17,6 +17,7 @@ public class DPSaleView extends TableView<DPSale> implements Exportable {
     public DPSaleView() {
         super();
 
+        TableColumn<DPSale, Integer> nbColumn = new TableColumn<DPSale, Integer>("NO");
         TableColumn<DPSale, String> dnColumn = new TableColumn<DPSale, String>("DEALER_NO");
         TableColumn<DPSale, String> pnColumn = new TableColumn<DPSale, String>("PART_NO");
         TableColumn<DPSale, String> firstSdColumn = new TableColumn<DPSale, String>("SALES_DATE1");
@@ -30,6 +31,7 @@ public class DPSaleView extends TableView<DPSale> implements Exportable {
         TableColumn<DPSale, String> fifthSdColumn = new TableColumn<DPSale, String>("SALES_DATE5");
         TableColumn<DPSale, Integer> fifthSdaColumn = new TableColumn<DPSale, Integer>("SALES_AMOUNT5");
 
+        nbColumn.setCellValueFactory(new PropertyValueFactory<DPSale, Integer>("index"));
         dnColumn.setCellValueFactory(new PropertyValueFactory<DPSale, String>("dealerNumber"));
         pnColumn.setCellValueFactory(new PropertyValueFactory<DPSale, String>("partNumber"));
         firstSdColumn.setCellValueFactory(new PropertyValueFactory<DPSale, String>("firstSaleDate"));
@@ -47,7 +49,7 @@ public class DPSaleView extends TableView<DPSale> implements Exportable {
         fifthSdColumn.setCellValueFactory(new PropertyValueFactory<DPSale, String>("fifthSaleDate"));
         fifthSdaColumn.setCellValueFactory(new PropertyValueFactory<DPSale, Integer>("fifthSaleAmount"));
 
-        getColumns().addAll(dnColumn, pnColumn, firstSdColumn, firstSdaColumn,
+        getColumns().addAll(nbColumn, dnColumn, pnColumn, firstSdColumn, firstSdaColumn,
                 secondSdColumn, secondSdaColumn, thirdSdColumn, thirdSdaColumn,
                 fourthSdColumn, fourthSdaColumn, fifthSdColumn, fifthSdaColumn);
 

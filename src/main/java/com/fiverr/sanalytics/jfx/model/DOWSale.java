@@ -1,5 +1,6 @@
 package com.fiverr.sanalytics.jfx.model;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 /**
@@ -7,6 +8,8 @@ import javafx.beans.property.SimpleStringProperty;
  * @date: 1/23/17
  */
 public class DOWSale {
+
+    public SimpleIntegerProperty index = new SimpleIntegerProperty();
 
     public SimpleStringProperty firstSaleDow = new SimpleStringProperty();
 
@@ -36,6 +39,10 @@ public class DOWSale {
 
     public String getFifthSaleDow() {
         return fifthSaleDow.getValue();
+    }
+
+    public Integer getIndex(){
+        return index.getValue();
     }
 
 }

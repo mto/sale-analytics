@@ -40,4 +40,8 @@ public class DateUtil {
             }
         }
     }
+
+    public static void main(String[] args){
+        System.out.println(DateUtil.extractDOW("10/11/12"));
+    }
 }
