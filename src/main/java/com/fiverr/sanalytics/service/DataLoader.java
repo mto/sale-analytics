@@ -1,6 +1,8 @@
 package com.fiverr.sanalytics.service;
 
+import com.fiverr.sanalytics.jfx.model.DOMSale;
 import com.fiverr.sanalytics.jfx.model.DPSale;
+import com.fiverr.sanalytics.util.DateUtil;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import java.sql.Connection;
@@ -27,6 +29,8 @@ public class DataLoader {
 
     private List<DPSale> dpSales = new ArrayList<DPSale>();
 
+    private List<DOMSale> domSales = new ArrayList<DOMSale>();
+    
     private DataLoader(){
         comboDS = new ComboPooledDataSource();
         comboDS.setJdbcUrl("jdbc:mysql://localhost:3306/sale_analytics");
@@ -77,22 +81,37 @@ public class DataLoader {
                 DPSale dpsRecord = new DPSale();
                 dpsRecord.dealerNumber.set(result.getString("dealer_number"));
                 dpsRecord.partNumber.set(result.getString("part_number"));
-                dpsRecord.firstSaleDate.set(result.getString("first_sale_date"));
+
+                String fsd = result.getString("first_sale_date");
+                dpsRecord.firstSaleDate.set(fsd);
                 dpsRecord.firstSaleAmount.set(result.getInt("first_sale_date_amount"));
 
-                dpsRecord.secondSaleDate.set(result.getString("second_sale_date"));
+                String ssd = result.getString("second_sale_date");
+                dpsRecord.secondSaleDate.set(ssd);
                 dpsRecord.secondSaleAmount.set(result.getInt("second_sale_date_amount"));
 
-                dpsRecord.thirdSaleDate.set(result.getString("third_sale_date"));
+                String tsd = result.getString("third_sale_date");
+                dpsRecord.thirdSaleDate.set(tsd);
                 dpsRecord.thirdSaleAmount.set(result.getInt("third_sale_date_amount"));
 
-                dpsRecord.fourthSaleDate.set(result.getString("fourth_sale_date"));
+                String fosd = result.getString("fourth_sale_date");
+                dpsRecord.fourthSaleDate.set(fosd);
                 dpsRecord.fourthSaleAmount.set(result.getInt("fourth_sale_date_amount"));
 
-                dpsRecord.fifthSaleDate.set(result.getString("fifth_sale_date"));
+                String fisd = result.getString("fifth_sale_date");
+                dpsRecord.fifthSaleDate.set(fisd);
                 dpsRecord.fifthSaleAmount.set(result.getInt("fifth_sale_date_amount"));
 
                 dpSales.add(dpsRecord);
+
+                DOMSale doms = new DOMSale();
+                doms.firstSaleDOM.set(DateUtil.extractDOM(fsd));
+                doms.secondSaleDOM.set(DateUtil.extractDOM(ssd));
+                doms.thirdSaleDOM.set(DateUtil.extractDOM(tsd));
+                doms.fourthSaleDOM.set(DateUtil.extractDOM(fosd));
+                doms.fifthSaleDOM.set(DateUtil.extractDOM(fisd));
+
+                domSales.add(doms);
             }
         }catch (Exception ex){
             ex.printStackTrace();
@@ -103,5 +122,11 @@ public class DataLoader {
         loadDPSales();
 
         return Collections.unmodifiableList(dpSales);
+    }
+
+    public List<DOMSale> getDOMSales(){
+        loadDPSales();
+
+        return Collections.unmodifiableList(domSales);
     }
 }

@@ -33,6 +33,16 @@ public class DPSale {
 
     public SimpleIntegerProperty fifthSaleAmount = new SimpleIntegerProperty(0);
 
+    public SimpleIntegerProperty firstSaleDOM = new SimpleIntegerProperty();
+
+    public SimpleIntegerProperty secondSaleDOM = new SimpleIntegerProperty();
+
+    public SimpleIntegerProperty thirdSaleDOM = new SimpleIntegerProperty();
+
+    public SimpleIntegerProperty fourthSaleDOM = new SimpleIntegerProperty();
+
+    public SimpleIntegerProperty fifthSaleDOM = new SimpleIntegerProperty();
+
     public String getDealerNumber() {
         return dealerNumber.getValue();
     }

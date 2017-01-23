@@ -1,6 +1,8 @@
 package com.fiverr.sanalytics;
 
+import com.fiverr.sanalytics.jfx.model.DOMSale;
 import com.fiverr.sanalytics.jfx.model.DPSale;
+import com.fiverr.sanalytics.jfx.view.DOMSaleView;
 import com.fiverr.sanalytics.service.DataLoader;
 import com.fiverr.sanalytics.jfx.view.DPSaleView;
 import javafx.application.Application;
@@ -68,17 +70,39 @@ public class SAnalytics extends Application {
         dlBox.setSpacing(5);
         dlBox.setPadding(new Insets(10, 0, 0, 10));
         dlBox.getChildren().addAll(dpsv, dpsvButton);
-
         dailyTab.setContent(dlBox);
-
-
 
 
         Tab finalTab = new Tab("Final");
         Tab blueTab = new Tab("Blue");
         Tab redTab = new Tab("Red");
         Tab greenTab = new Tab("Green");
+
         Tab yellowTab = new Tab("Yellow");
+        final DOMSaleView domsv = new DOMSaleView();
+        final ObservableList<DOMSale> domsvData = FXCollections.observableArrayList(dbLoader.getDOMSales());
+        dpsv.setItems(dpsvData);
+
+        Button domsvButton = new Button("Export");
+        dpsvButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                FileChooser fc = new FileChooser();
+                fc.setTitle("Export data to Excel");
+                File f = fc.showSaveDialog(primaryStage);
+                if(f!= null && f.getName().endsWith(".xlsx")){
+                    domsv.exportToFile(f);
+                }
+            }
+        });
+
+        VBox ylBox = new VBox();
+        ylBox.setSpacing(5);
+        ylBox.setPadding(new Insets(10, 0, 0, 10));
+        ylBox.getChildren().addAll(domsv, domsvButton);
+
+        yellowTab.setContent(ylBox);
+
 
         tabPane.getTabs().addAll(dailyTab, finalTab, blueTab, redTab, greenTab, yellowTab);
 

@@ -32,7 +32,6 @@ public class DPSaleView extends TableView<DPSale> implements Exportable {
 
         dnColumn.setCellValueFactory(new PropertyValueFactory<DPSale, String>("dealerNumber"));
         pnColumn.setCellValueFactory(new PropertyValueFactory<DPSale, String>("partNumber"));
-
         firstSdColumn.setCellValueFactory(new PropertyValueFactory<DPSale, String>("firstSaleDate"));
         firstSdaColumn.setCellValueFactory(new PropertyValueFactory<DPSale, Integer>("firstSaleAmount"));
 
