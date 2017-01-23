@@ -2,8 +2,10 @@ package com.fiverr.sanalytics.service;
 
 import com.fiverr.sanalytics.jfx.model.DOMSale;
 import com.fiverr.sanalytics.jfx.model.DOWSale;
+import com.fiverr.sanalytics.jfx.model.DOWTotalSale;
 import com.fiverr.sanalytics.jfx.model.DPSale;
 import com.fiverr.sanalytics.util.DateUtil;
+import com.fiverr.sanalytics.util.StringUtil;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import java.sql.Connection;
@@ -11,7 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -33,8 +37,10 @@ public class DataLoader {
     private final List<DOMSale> domSales = new ArrayList<DOMSale>();
 
     private final List<DOWSale> dowSales = new ArrayList<DOWSale>();
-    
-    private DataLoader(){
+
+    private final Map<String, DOWTotalSale> dowTotalSales = new HashMap<String, DOWTotalSale>();
+
+    private DataLoader() {
         comboDS = new ComboPooledDataSource();
         comboDS.setJdbcUrl("jdbc:mysql://localhost:3306/sale_analytics");
         comboDS.setUser("maustin");
@@ -45,10 +51,10 @@ public class DataLoader {
         comboDS.setMaxStatements(100);
     }
 
-    public static DataLoader getInstance(){
-        if(instance == null){
-            synchronized (DataLoader.class){
-                if(instance == null){
+    public static DataLoader getInstance() {
+        if (instance == null) {
+            synchronized (DataLoader.class) {
+                if (instance == null) {
                     DataLoader tmp = new DataLoader();
                     instance = tmp;
                 }
@@ -58,10 +64,10 @@ public class DataLoader {
         return instance;
     }
 
-    public void loadDPSales(){
-        if(!dpSalesLoaded.get()){
-            synchronized (lock){
-                if(!dpSalesLoaded.get()){
+    public void loadDPSales() {
+        if (!dpSalesLoaded.get()) {
+            synchronized (lock) {
+                if (!dpSalesLoaded.get()) {
                     _loadDPSales();
                     dpSalesLoaded.set(true);
                 }
@@ -69,12 +75,12 @@ public class DataLoader {
         }
     }
 
-    private void _loadDPSales(){
+    private void _loadDPSales() {
         Connection conn;
         PreparedStatement pstmt;
         ResultSet result;
 
-        try{
+        try {
             conn = comboDS.getConnection();
             pstmt = conn.prepareStatement("select * from dealer_part_sales");
 
@@ -82,7 +88,7 @@ public class DataLoader {
 
             int index = 0;
 
-            while(result.next()){
+            while (result.next()) {
                 index++;
 
                 DPSale dpsRecord = new DPSale();
@@ -122,37 +128,128 @@ public class DataLoader {
 
                 domSales.add(doms);
 
+                String fsdow = DateUtil.extractDOW(fsd);
+                String ssdow = DateUtil.extractDOW(ssd);
+                String tsdow = DateUtil.extractDOW(tsd);
+                String fosdow = DateUtil.extractDOW(fosd);
+                String fisdow = DateUtil.extractDOW(fisd);
+
                 DOWSale dows = new DOWSale();
                 dows.index.set(index);
-                dows.firstSaleDow.set(DateUtil.extractDOW(fsd));
-                dows.secondSaleDow.set(DateUtil.extractDOW(ssd));
-                dows.thirdSaleDow.set(DateUtil.extractDOW(tsd));
-                dows.fourthSaleDow.set(DateUtil.extractDOW(fosd));
-                dows.fifthSaleDow.set(DateUtil.extractDOW(fisd));
+                dows.firstSaleDow.set(fsdow);
+                dows.secondSaleDow.set(ssdow);
+                dows.thirdSaleDow.set(tsdow);
+                dows.fourthSaleDow.set(fosdow);
+                dows.fifthSaleDow.set(fisdow);
 
                 dowSales.add(dows);
 
+                if (StringUtil.notNullOrEmpty(fsdow)) {
+                    DOWTotalSale dowtts = getDOWTotalSale(fsdow);
+                    try {
+                        int count = dowtts.getCount() + result.getInt("first_sale_date_amount");
+                        dowtts.count.set(count);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                if (StringUtil.notNullOrEmpty(ssdow)) {
+                    DOWTotalSale dowtts = getDOWTotalSale(ssdow);
+                    try {
+                        int count = dowtts.getCount() + result.getInt("second_sale_date_amount");
+                        dowtts.count.set(count);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
+                }
+
+                if (StringUtil.notNullOrEmpty(tsdow)) {
+                    DOWTotalSale dowtts = getDOWTotalSale(tsdow);
+                    try {
+                        int count = dowtts.getCount() + result.getInt("third_sale_date_amount");
+                        dowtts.count.set(count);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
+                }
+
+                if (StringUtil.notNullOrEmpty(fosdow)) {
+                    DOWTotalSale dowtts = getDOWTotalSale(fosdow);
+                    try {
+                        int count = dowtts.getCount() + result.getInt("fourth_sale_date_amount");
+                        dowtts.count.set(count);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+
+                }
+
+                if (StringUtil.notNullOrEmpty(fisdow)) {
+                    DOWTotalSale dowtts = getDOWTotalSale(fisdow);
+                    try {
+                        int count = dowtts.getCount() + result.getInt("fifth_sale_date_amount");
+                        dowtts.count.set(count);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
             }
-        }catch (Exception ex){
+
+            int sumOfDOWtts = 0;
+            for (DOWTotalSale v : dowTotalSales.values()) {
+                sumOfDOWtts += v.getCount();
+            }
+
+            for (int i = 1; i < 8; i++) {
+                DOWTotalSale dts = dowTotalSales.get("" + i);
+                double pct = Math.round(dts.getCount() * 100.0) / sumOfDOWtts;
+
+                dts.percentage.set("" + pct + "%");
+            }
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public List<DPSale> getDPSales(){
+    private DOWTotalSale getDOWTotalSale(String dow) {
+        DOWTotalSale dowtts = dowTotalSales.get(dow);
+
+        if (dowtts == null) {
+            dowtts = new DOWTotalSale();
+            dowtts.dow.set(dow);
+            dowtts.day.set(DOWTotalSale.DOW_DAY_MAP.get(dow));
+
+            dowTotalSales.put(dow, dowtts);
+        }
+
+        return dowtts;
+    }
+
+    public List<DPSale> getDPSales() {
         loadDPSales();
 
         return Collections.unmodifiableList(dpSales);
     }
 
-    public List<DOMSale> getDOMSales(){
+    public List<DOMSale> getDOMSales() {
         loadDPSales();
 
         return Collections.unmodifiableList(domSales);
     }
 
-    public List<DOWSale> getDOWSales(){
+    public List<DOWSale> getDOWSales() {
         loadDPSales();
 
         return Collections.unmodifiableList(dowSales);
+    }
+
+    public Map<String, DOWTotalSale> getDOWTotalSales() {
+        loadDPSales();
+
+        return Collections.unmodifiableMap(dowTotalSales);
     }
 }

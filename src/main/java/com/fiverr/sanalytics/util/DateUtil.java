@@ -27,14 +27,16 @@ public class DateUtil {
             return "";
         } else {
             Calendar c = Calendar.getInstance();
+            c.setFirstDayOfWeek(Calendar.MONDAY);
             try {
                 int year = Integer.parseInt(tokens[2]);//Avoid such hardcode
                 int month = Integer.parseInt(tokens[0]);
                 int day = Integer.parseInt(tokens[1]);
 
                 c.set(year, month, day);
+                int dow =  1 + ((c.get(Calendar.DAY_OF_WEEK) + 7 - c.getFirstDayOfWeek()) % 7);
 
-                return "" + c.get(Calendar.DAY_OF_WEEK);
+                return "" + dow;
             } catch (Exception ex) {
                 return "";
             }
@@ -42,6 +44,9 @@ public class DateUtil {
     }
 
     public static void main(String[] args){
-        System.out.println(DateUtil.extractDOW("10/11/12"));
+        System.out.println(DateUtil.extractDOW("10/15/10"));
+        System.out.println(DateUtil.extractDOW("3/4/15"));
+        System.out.println(DateUtil.extractDOW("6/1/15"));
+
     }
 }
