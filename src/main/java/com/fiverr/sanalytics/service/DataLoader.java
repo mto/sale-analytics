@@ -206,7 +206,7 @@ public class DataLoader {
 
             for (int i = 1; i < 8; i++) {
                 DOWTotalSale dts = dowTotalSales.get("" + i);
-                double pct = Math.round(dts.getCount() * 100.0) / sumOfDOWtts;
+                double pct = Math.round(dts.getCount() * 7 * 100.0) / sumOfDOWtts;
 
                 dts.percentage.set("" + pct + "%");
             }
