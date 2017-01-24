@@ -1,10 +1,12 @@
 package com.fiverr.sanalytics;
 
 import com.fiverr.sanalytics.jfx.model.DOMSale;
+import com.fiverr.sanalytics.jfx.model.DOMTotalSale;
 import com.fiverr.sanalytics.jfx.model.DOWSale;
 import com.fiverr.sanalytics.jfx.model.DOWTotalSale;
 import com.fiverr.sanalytics.jfx.model.DPSale;
 import com.fiverr.sanalytics.jfx.view.DOMSaleView;
+import com.fiverr.sanalytics.jfx.view.DOMTotalSaleView;
 import com.fiverr.sanalytics.jfx.view.DOWSaleView;
 import com.fiverr.sanalytics.jfx.view.DOWTotalSaleView;
 import com.fiverr.sanalytics.service.DataLoader;
@@ -78,8 +80,34 @@ public class SAnalytics extends Application {
 
 
         Tab finalTab = new Tab("Final");
+
+        /* Setup Blue tab */
         Tab blueTab = new Tab("Blue");
-        
+        final DOMTotalSaleView domttsv = new DOMTotalSaleView();
+        final ObservableList<DOMTotalSale> domttsvData = FXCollections.observableArrayList(dbLoader.getDOMTotalSales().values());
+        domttsv.setItems(domttsvData);
+
+        Button domttsvButton = new Button("Export");
+        domttsvButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                FileChooser fc = new FileChooser();
+                fc.setTitle("Export data to Excel");
+                File f = fc.showSaveDialog(primaryStage);
+                if(f!= null && f.getName().endsWith(".xlsx")){
+                    domttsv.exportToFile(f);
+                }
+            }
+        });
+
+        VBox blueBox = new VBox();
+        blueBox.setSpacing(5);
+        blueBox.setPadding(new Insets(10, 0, 0, 10));
+        blueBox.getChildren().addAll(domttsv, domttsvButton);
+
+        blueTab.setContent(blueBox);
+
+
         /* Setup Red tab */
         Tab redTab = new Tab("Red");
         final DOWTotalSaleView dowttsv = new DOWTotalSaleView();

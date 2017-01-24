@@ -1,6 +1,7 @@
 package com.fiverr.sanalytics.service;
 
 import com.fiverr.sanalytics.jfx.model.DOMSale;
+import com.fiverr.sanalytics.jfx.model.DOMTotalSale;
 import com.fiverr.sanalytics.jfx.model.DOWSale;
 import com.fiverr.sanalytics.jfx.model.DOWTotalSale;
 import com.fiverr.sanalytics.jfx.model.DPSale;
@@ -13,9 +14,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -39,6 +42,20 @@ public class DataLoader {
     private final List<DOWSale> dowSales = new ArrayList<DOWSale>();
 
     private final Map<String, DOWTotalSale> dowTotalSales = new HashMap<String, DOWTotalSale>();
+
+    private final Map<String, DOMTotalSale> domTotalSales = new TreeMap<String, DOMTotalSale>(new Comparator<String>() {
+        @Override
+        public int compare(String o1, String o2) {
+            try {
+                int n1 = Integer.parseInt(o1);
+                int n2 = Integer.parseInt(o2);
+
+                return n1 - n2;
+            } catch (Exception ex) {
+                return 0;
+            }
+        }
+    });
 
     private DataLoader() {
         comboDS = new ComboPooledDataSource();
@@ -197,21 +214,111 @@ public class DataLoader {
                     }
                 }
 
+                String fsdom = DateUtil.extractDOM(fsd);
+                String ssdom = DateUtil.extractDOM(ssd);
+                String tsdom = DateUtil.extractDOM(tsd);
+                String fosdom = DateUtil.extractDOM(fosd);
+                String fisdom = DateUtil.extractDOM(fisd);
+
+                if (StringUtil.notNullOrEmpty(fsdom)) {
+                    DOMTotalSale domtts = getDOMTotalSale(fsdom);
+                    try {
+                        int count = domtts.getCount() + result.getInt("first_sale_date_amount");
+                        domtts.count.set(count);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                if (StringUtil.notNullOrEmpty(ssdom)) {
+                    DOMTotalSale domtts = getDOMTotalSale(ssdom);
+                    try {
+                        int count = domtts.getCount() + result.getInt("second_sale_date_amount");
+                        domtts.count.set(count);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                if (StringUtil.notNullOrEmpty(tsdom)) {
+                    DOMTotalSale domtts = getDOMTotalSale(tsdom);
+                    try {
+                        int count = domtts.getCount() + result.getInt("third_sale_date_amount");
+                        domtts.count.set(count);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                if (StringUtil.notNullOrEmpty(fosdom)) {
+                    DOMTotalSale domtts = getDOMTotalSale(fosdom);
+                    try {
+                        int count = domtts.getCount() + result.getInt("fourth_sale_date_amount");
+                        domtts.count.set(count);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+                if (StringUtil.notNullOrEmpty(fisdom)) {
+                    DOMTotalSale domtts = getDOMTotalSale(fisdom);
+                    try {
+                        int count = domtts.getCount() + result.getInt("fifth_sale_date_amount");
+                        domtts.count.set(count);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    }
+                }
             }
 
-            int sumOfDOWtts = 0;
-            for (DOWTotalSale v : dowTotalSales.values()) {
-                sumOfDOWtts += v.getCount();
-            }
-
-            for (int i = 1; i < 8; i++) {
-                DOWTotalSale dts = dowTotalSales.get("" + i);
-                double pct = Math.round(dts.getCount() * 7 * 100.0) / sumOfDOWtts;
-
-                dts.percentage.set("" + pct + "%");
-            }
+            computeDOWTTSPercentage();
+            computeDOMTTSPercentage();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    private void computeDOWTTSPercentage() {
+        int sumOfDOWtts = 0;
+        for (DOWTotalSale v : dowTotalSales.values()) {
+            sumOfDOWtts += v.getCount();
+        }
+
+        for (int i = 1; i < 8; i++) {
+            DOWTotalSale dts = dowTotalSales.get("" + i);
+            double pct = Math.round(dts.getCount() * 7 * 100.0) / sumOfDOWtts;
+
+            dts.percentage.set("" + pct + "%");
+        }
+    }
+
+    private void computeDOMTTSPercentage() {
+        int sum28dm = 0;
+        int sum29dm = 0;
+        int sum30dm = 0;
+        int sum31dm = 0;
+
+        for (int i = 1; i < 32; i++) {
+            DOMTotalSale domtts = domTotalSales.get("" + i);
+
+            sum28dm += (i <= 28) ? domtts.getCount() : 0;
+            sum29dm += (i <= 29) ? domtts.getCount() : 0;
+            sum30dm += (i <= 30) ? domtts.getCount() : 0;
+            sum31dm += (i <= 31) ? domtts.getCount() : 0;
+        }
+
+        for (int i = 1; i < 31; i++) {
+            DOMTotalSale domtts = domTotalSales.get("" + i);
+
+            double pct28dm = Math.round(domtts.getCount() * 28 * 100.0) / sum28dm;
+            double pct29dm = Math.round(domtts.getCount() * 29 * 100.0) / sum29dm;
+            double pct30dm = Math.round(domtts.getCount() * 30 * 100.0) / sum30dm;
+            double pct31dm = Math.round(domtts.getCount() * 31 * 100.0) / sum31dm;
+
+            domtts.tteightDayMo.set("" + pct28dm + "%");
+            domtts.ttnineDayMo.set("" + pct29dm + "%");
+            domtts.thrdtDayMo.set("" + pct30dm + "%");
+            domtts.thrdtoneDayMo.set("" + pct31dm + "%");
         }
     }
 
@@ -227,6 +334,20 @@ public class DataLoader {
         }
 
         return dowtts;
+    }
+
+    private DOMTotalSale getDOMTotalSale(String dom) {
+        DOMTotalSale domtts = domTotalSales.get(dom);
+
+        if (domtts == null) {
+            domtts = new DOMTotalSale();
+            domtts.dom.set(dom);
+            domtts.monthsWith.set("12");
+
+            domTotalSales.put(dom, domtts);
+        }
+
+        return domtts;
     }
 
     public List<DPSale> getDPSales() {
@@ -251,5 +372,11 @@ public class DataLoader {
         loadDPSales();
 
         return Collections.unmodifiableMap(dowTotalSales);
+    }
+
+    public Map<String, DOMTotalSale> getDOMTotalSales() {
+        loadDPSales();
+
+        return Collections.unmodifiableMap(domTotalSales);
     }
 }
