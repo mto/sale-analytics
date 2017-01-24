@@ -1,7 +1,6 @@
-package com.fiverr.sanalytics.util;
+package com.cca.sanalytics.util;
 
-import com.fiverr.sanalytics.jfx.model.ExcelRow;
-import javafx.collections.ObservableList;
+import com.cca.sanalytics.jfx.model.ExcelRow;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.apache.poi.xssf.usermodel.XSSFCell;

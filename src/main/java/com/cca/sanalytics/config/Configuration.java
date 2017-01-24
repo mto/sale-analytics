@@ -1,4 +1,4 @@
-package com.fiverr.sanalytics.config;
+package com.cca.sanalytics.config;
 
 import java.io.InputStream;
 import java.util.HashMap;

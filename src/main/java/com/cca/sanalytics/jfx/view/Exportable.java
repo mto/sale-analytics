@@ -1,4 +1,4 @@
-package com.fiverr.sanalytics.jfx.view;
+package com.cca.sanalytics.jfx.view;
 
 import java.io.File;
 

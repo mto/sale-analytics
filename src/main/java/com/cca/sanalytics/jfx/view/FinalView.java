@@ -1,6 +1,6 @@
-package com.fiverr.sanalytics.jfx.view;
+package com.cca.sanalytics.jfx.view;
 
-import com.fiverr.sanalytics.jfx.model.FinalData;
+import com.cca.sanalytics.jfx.model.FinalData;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 

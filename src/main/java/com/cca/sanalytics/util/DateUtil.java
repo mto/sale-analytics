@@ -1,4 +1,4 @@
-package com.fiverr.sanalytics.util;
+package com.cca.sanalytics.util;
 
 import java.util.Calendar;
 

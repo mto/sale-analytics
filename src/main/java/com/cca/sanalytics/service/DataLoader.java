@@ -1,13 +1,13 @@
-package com.fiverr.sanalytics.service;
+package com.cca.sanalytics.service;
 
-import com.fiverr.sanalytics.config.Configuration;
-import com.fiverr.sanalytics.jfx.model.DOMSale;
-import com.fiverr.sanalytics.jfx.model.DOMTotalSale;
-import com.fiverr.sanalytics.jfx.model.DOWSale;
-import com.fiverr.sanalytics.jfx.model.DOWTotalSale;
-import com.fiverr.sanalytics.jfx.model.DPSale;
-import com.fiverr.sanalytics.util.DateUtil;
-import com.fiverr.sanalytics.util.StringUtil;
+import com.cca.sanalytics.jfx.model.DOMSale;
+import com.cca.sanalytics.jfx.model.DOMTotalSale;
+import com.cca.sanalytics.jfx.model.DOWSale;
+import com.cca.sanalytics.jfx.model.DOWTotalSale;
+import com.cca.sanalytics.jfx.model.DPSale;
+import com.cca.sanalytics.util.DateUtil;
+import com.cca.sanalytics.util.StringUtil;
+import com.cca.sanalytics.config.Configuration;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import java.sql.Connection;

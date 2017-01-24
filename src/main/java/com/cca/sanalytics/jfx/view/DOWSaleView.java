@@ -1,7 +1,7 @@
-package com.fiverr.sanalytics.jfx.view;
+package com.cca.sanalytics.jfx.view;
 
-import com.fiverr.sanalytics.jfx.model.DOWSale;
-import com.fiverr.sanalytics.util.ExcelUtil;
+import com.cca.sanalytics.jfx.model.DOWSale;
+import com.cca.sanalytics.util.ExcelUtil;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;

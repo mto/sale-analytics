@@ -1,4 +1,4 @@
-package com.fiverr.sanalytics.util;
+package com.cca.sanalytics.util;
 
 /**
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>

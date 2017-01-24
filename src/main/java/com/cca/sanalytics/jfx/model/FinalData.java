@@ -1,4 +1,4 @@
-package com.fiverr.sanalytics.jfx.model;
+package com.cca.sanalytics.jfx.model;
 
 /**
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>

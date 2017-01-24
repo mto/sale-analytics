@@ -1,4 +1,4 @@
-package com.fiverr.sanalytics.jfx.model;
+package com.cca.sanalytics.jfx.model;
 
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
