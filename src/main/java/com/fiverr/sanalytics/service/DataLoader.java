@@ -161,58 +161,7 @@ public class DataLoader {
 
                 dowSales.add(dows);
 
-                if (StringUtil.notNullOrEmpty(fsdow)) {
-                    DOWTotalSale dowtts = getDOWTotalSale(fsdow);
-                    try {
-                        int count = dowtts.getCount() + result.getInt("first_sale_date_amount");
-                        dowtts.count.set(count);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                if (StringUtil.notNullOrEmpty(ssdow)) {
-                    DOWTotalSale dowtts = getDOWTotalSale(ssdow);
-                    try {
-                        int count = dowtts.getCount() + result.getInt("second_sale_date_amount");
-                        dowtts.count.set(count);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-
-                }
-
-                if (StringUtil.notNullOrEmpty(tsdow)) {
-                    DOWTotalSale dowtts = getDOWTotalSale(tsdow);
-                    try {
-                        int count = dowtts.getCount() + result.getInt("third_sale_date_amount");
-                        dowtts.count.set(count);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-
-                }
-
-                if (StringUtil.notNullOrEmpty(fosdow)) {
-                    DOWTotalSale dowtts = getDOWTotalSale(fosdow);
-                    try {
-                        int count = dowtts.getCount() + result.getInt("fourth_sale_date_amount");
-                        dowtts.count.set(count);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-
-                }
-
-                if (StringUtil.notNullOrEmpty(fisdow)) {
-                    DOWTotalSale dowtts = getDOWTotalSale(fisdow);
-                    try {
-                        int count = dowtts.getCount() + result.getInt("fifth_sale_date_amount");
-                        dowtts.count.set(count);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
+                extractDOWTTS(fsdow, ssdow, tsdow, fosdow, fisdow, result);
 
                 String fsdom = DateUtil.extractDOM(fsd);
                 String ssdom = DateUtil.extractDOM(ssd);
@@ -220,55 +169,7 @@ public class DataLoader {
                 String fosdom = DateUtil.extractDOM(fosd);
                 String fisdom = DateUtil.extractDOM(fisd);
 
-                if (StringUtil.notNullOrEmpty(fsdom)) {
-                    DOMTotalSale domtts = getDOMTotalSale(fsdom);
-                    try {
-                        int count = domtts.getCount() + result.getInt("first_sale_date_amount");
-                        domtts.count.set(count);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                if (StringUtil.notNullOrEmpty(ssdom)) {
-                    DOMTotalSale domtts = getDOMTotalSale(ssdom);
-                    try {
-                        int count = domtts.getCount() + result.getInt("second_sale_date_amount");
-                        domtts.count.set(count);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                if (StringUtil.notNullOrEmpty(tsdom)) {
-                    DOMTotalSale domtts = getDOMTotalSale(tsdom);
-                    try {
-                        int count = domtts.getCount() + result.getInt("third_sale_date_amount");
-                        domtts.count.set(count);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                if (StringUtil.notNullOrEmpty(fosdom)) {
-                    DOMTotalSale domtts = getDOMTotalSale(fosdom);
-                    try {
-                        int count = domtts.getCount() + result.getInt("fourth_sale_date_amount");
-                        domtts.count.set(count);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-                if (StringUtil.notNullOrEmpty(fisdom)) {
-                    DOMTotalSale domtts = getDOMTotalSale(fisdom);
-                    try {
-                        int count = domtts.getCount() + result.getInt("fifth_sale_date_amount");
-                        domtts.count.set(count);
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                    }
-                }
+                extractDOMTTS(fsdom, ssdom, tsdom, fosdom, fisdom, result);
             }
 
             computeDOWTTSPercentage();
@@ -276,6 +177,114 @@ public class DataLoader {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void extractDOWTTS(String fsdow, String ssdow, String tsdow, String fosdow, String fisdow, final ResultSet result) {
+        if (StringUtil.notNullOrEmpty(fsdow)) {
+            DOWTotalSale dowtts = getDOWTotalSale(fsdow);
+            try {
+                int count = dowtts.getCount() + result.getInt("first_sale_date_amount");
+                dowtts.count.set(count);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (StringUtil.notNullOrEmpty(ssdow)) {
+            DOWTotalSale dowtts = getDOWTotalSale(ssdow);
+            try {
+                int count = dowtts.getCount() + result.getInt("second_sale_date_amount");
+                dowtts.count.set(count);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+        }
+
+        if (StringUtil.notNullOrEmpty(tsdow)) {
+            DOWTotalSale dowtts = getDOWTotalSale(tsdow);
+            try {
+                int count = dowtts.getCount() + result.getInt("third_sale_date_amount");
+                dowtts.count.set(count);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+        }
+
+        if (StringUtil.notNullOrEmpty(fosdow)) {
+            DOWTotalSale dowtts = getDOWTotalSale(fosdow);
+            try {
+                int count = dowtts.getCount() + result.getInt("fourth_sale_date_amount");
+                dowtts.count.set(count);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+
+        }
+
+        if (StringUtil.notNullOrEmpty(fisdow)) {
+            DOWTotalSale dowtts = getDOWTotalSale(fisdow);
+            try {
+                int count = dowtts.getCount() + result.getInt("fifth_sale_date_amount");
+                dowtts.count.set(count);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void extractDOMTTS(String fsdom, String ssdom, String tsdom, String fosdom, String fisdom, final ResultSet result) {
+        if (StringUtil.notNullOrEmpty(fsdom)) {
+            DOMTotalSale domtts = getDOMTotalSale(fsdom);
+            try {
+                int count = domtts.getCount() + result.getInt("first_sale_date_amount");
+                domtts.count.set(count);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (StringUtil.notNullOrEmpty(ssdom)) {
+            DOMTotalSale domtts = getDOMTotalSale(ssdom);
+            try {
+                int count = domtts.getCount() + result.getInt("second_sale_date_amount");
+                domtts.count.set(count);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (StringUtil.notNullOrEmpty(tsdom)) {
+            DOMTotalSale domtts = getDOMTotalSale(tsdom);
+            try {
+                int count = domtts.getCount() + result.getInt("third_sale_date_amount");
+                domtts.count.set(count);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (StringUtil.notNullOrEmpty(fosdom)) {
+            DOMTotalSale domtts = getDOMTotalSale(fosdom);
+            try {
+                int count = domtts.getCount() + result.getInt("fourth_sale_date_amount");
+                domtts.count.set(count);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (StringUtil.notNullOrEmpty(fisdom)) {
+            DOMTotalSale domtts = getDOMTotalSale(fisdom);
+            try {
+                int count = domtts.getCount() + result.getInt("fifth_sale_date_amount");
+                domtts.count.set(count);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     private void computeDOWTTSPercentage() {
