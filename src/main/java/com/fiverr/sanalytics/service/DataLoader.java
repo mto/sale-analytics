@@ -307,7 +307,7 @@ public class DataLoader {
             sum31dm += (i <= 31) ? domtts.getCount() : 0;
         }
 
-        for (int i = 1; i < 31; i++) {
+        for (int i = 1; i < 32; i++) {
             DOMTotalSale domtts = domTotalSales.get("" + i);
 
             double pct28dm = Math.round(domtts.getCount() * 28 * 100.0) / sum28dm;
@@ -315,10 +315,10 @@ public class DataLoader {
             double pct30dm = Math.round(domtts.getCount() * 30 * 100.0) / sum30dm;
             double pct31dm = Math.round(domtts.getCount() * 31 * 100.0) / sum31dm;
 
-            domtts.tteightDayMo.set("" + pct28dm + "%");
-            domtts.ttnineDayMo.set("" + pct29dm + "%");
-            domtts.thrdtDayMo.set("" + pct30dm + "%");
-            domtts.thrdtoneDayMo.set("" + pct31dm + "%");
+            domtts.tteightDayMo.set((i <= 28) ? "" + pct28dm + "%" : "");
+            domtts.ttnineDayMo.set((i <= 29) ? "" + pct29dm + "%" : "");
+            domtts.thrdtDayMo.set((i <= 30) ? "" + pct30dm + "%" : "");
+            domtts.thrdtoneDayMo.set((i <= 31) ? "" + pct31dm + "%" : "");
         }
     }
 
