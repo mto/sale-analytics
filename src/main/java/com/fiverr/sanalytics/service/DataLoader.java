@@ -1,5 +1,6 @@
 package com.fiverr.sanalytics.service;
 
+import com.fiverr.sanalytics.config.Configuration;
 import com.fiverr.sanalytics.jfx.model.DOMSale;
 import com.fiverr.sanalytics.jfx.model.DOMTotalSale;
 import com.fiverr.sanalytics.jfx.model.DOWSale;
@@ -59,9 +60,11 @@ public class DataLoader {
 
     private DataLoader() {
         comboDS = new ComboPooledDataSource();
-        comboDS.setJdbcUrl("jdbc:mysql://localhost:3306/sale_analytics");
-        comboDS.setUser("maustin");
-        comboDS.setPassword("123456");
+        Configuration config = Configuration.getInstance();
+
+        comboDS.setJdbcUrl(config.getParam("jdbcURL", "jdbc:mysql://localhost:3306/sale_analytics"));
+        comboDS.setUser(config.getParam("username", "maustin"));
+        comboDS.setPassword(config.getParam("password", "maustin"));
         comboDS.setInitialPoolSize(5);
         comboDS.setMinPoolSize(5);
         comboDS.setMaxPoolSize(10);
