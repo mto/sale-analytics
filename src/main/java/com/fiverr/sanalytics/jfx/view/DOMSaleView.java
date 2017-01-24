@@ -1,6 +1,7 @@
 package com.fiverr.sanalytics.jfx.view;
 
 import com.fiverr.sanalytics.jfx.model.DOMSale;
+import com.fiverr.sanalytics.util.ExcelUtil;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -35,6 +36,6 @@ public class DOMSaleView extends TableView<DOMSale> implements Exportable {
 
     @Override
     public void exportToFile(File f) {
-
+        ExcelUtil.writeToExcel("Yellow", this, f);
     }
 }

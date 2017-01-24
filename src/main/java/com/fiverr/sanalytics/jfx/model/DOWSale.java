@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date: 1/23/17
  */
-public class DOWSale {
+public class DOWSale implements ExcelRow {
 
     public SimpleIntegerProperty index = new SimpleIntegerProperty();
 
@@ -41,8 +41,19 @@ public class DOWSale {
         return fifthSaleDow.getValue();
     }
 
-    public Integer getIndex(){
+    public Integer getIndex() {
         return index.getValue();
     }
 
+    @Override
+    public String[] getCells() {
+        return new String[]
+                {
+                        getFirstSaleDow(),
+                        getSecondSaleDow(),
+                        getThirdSaleDow(),
+                        getFourthSaleDow(),
+                        getFifthSaleDow()
+                };
+    }
 }

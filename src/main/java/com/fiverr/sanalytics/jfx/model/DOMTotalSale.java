@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date: 1/24/17
  */
-public class DOMTotalSale {
+public class DOMTotalSale implements ExcelRow {
 
     public SimpleStringProperty dom = new SimpleStringProperty();
 
@@ -55,5 +55,19 @@ public class DOMTotalSale {
 
     public String getThrdtoneDayMo() {
         return thrdtoneDayMo.get();
+    }
+
+    @Override
+    public String[] getCells() {
+        return new String[]{
+                getDom(),
+                "" + getCount(),
+                getMonthsWith(),
+                "" + getAdjusted(),
+                getTteightDayMo(),
+                getTtnineDayMo(),
+                getThrdtDayMo(),
+                getThrdtoneDayMo()
+        };
     }
 }

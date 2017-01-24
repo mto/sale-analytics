@@ -7,7 +7,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date: 1/22/17
  */
-public class DPSale {
+public class DPSale implements ExcelRow {
 
     public SimpleIntegerProperty index = new SimpleIntegerProperty();
 
@@ -97,4 +97,21 @@ public class DPSale {
         return index.getValue();
     }
 
+    @Override
+    public String[] getCells() {
+        return new String[]{
+                getDealerNumber(),
+                getPartNumber(),
+                getFirstSaleDate(),
+                "" + getFirstSaleAmount(),
+                getSecondSaleDate(),
+                "" + getSecondSaleAmount(),
+                getThirdSaleDate(),
+                "" + getThirdSaleAmount(),
+                getFourthSaleDate(),
+                "" + getFourthSaleAmount(),
+                getFifthSaleDate(),
+                "" + getFifthSaleAmount()
+        };
+    }
 }

@@ -45,7 +45,6 @@ public class DataLoader {
     private final Map<String, DOWTotalSale> dowTotalSales = new HashMap<String, DOWTotalSale>();
 
     private final Map<String, DOMTotalSale> domTotalSales = new TreeMap<String, DOMTotalSale>(new Comparator<String>() {
-        @Override
         public int compare(String o1, String o2) {
             try {
                 int n1 = Integer.parseInt(o1);

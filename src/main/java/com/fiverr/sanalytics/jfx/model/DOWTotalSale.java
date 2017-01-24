@@ -10,7 +10,7 @@ import java.util.Map;
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date: 1/23/17
  */
-public class DOWTotalSale {
+public class DOWTotalSale implements ExcelRow {
 
     public final static Map<String, String> DOW_DAY_MAP = new HashMap<String, String>();
 
@@ -46,5 +46,15 @@ public class DOWTotalSale {
 
     public String getPercentage() {
         return percentage.getValue();
+    }
+
+    @Override
+    public String[] getCells() {
+        return new String[]{
+                getDow(),
+                getDay(),
+                "" + getCount(),
+                getPercentage()
+        };
     }
 }
