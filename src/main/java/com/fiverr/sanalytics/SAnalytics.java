@@ -9,6 +9,7 @@ import com.fiverr.sanalytics.jfx.view.DOMSaleView;
 import com.fiverr.sanalytics.jfx.view.DOMTotalSaleView;
 import com.fiverr.sanalytics.jfx.view.DOWSaleView;
 import com.fiverr.sanalytics.jfx.view.DOWTotalSaleView;
+import com.fiverr.sanalytics.jfx.view.FinalView;
 import com.fiverr.sanalytics.service.DataLoader;
 import com.fiverr.sanalytics.jfx.view.DPSaleView;
 import javafx.application.Application;
@@ -54,7 +55,6 @@ public class SAnalytics extends Application {
         TabPane tabPane = new TabPane();
 
         Tab dailyTab = new Tab("Daily");
-
         final DPSaleView dpsv = new DPSaleView();
         final ObservableList<DPSale> dpsvData = FXCollections.observableArrayList(dbLoader.getDPSales());
         dpsv.setItems(dpsvData);
@@ -78,8 +78,28 @@ public class SAnalytics extends Application {
         dlBox.getChildren().addAll(dpsv, dpsvButton);
         dailyTab.setContent(dlBox);
 
+        /* Setup Final tab */
+        Tab fnTab = new Tab("Final");
+        final FinalView fnv = new FinalView();
 
-        Tab finalTab = new Tab("Final");
+        Button fnvButton = new Button("Export");
+        fnvButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                FileChooser fc = new FileChooser();
+                fc.setTitle("Export data to Excel");
+                File f = fc.showSaveDialog(primaryStage);
+                if(f!= null && f.getName().endsWith(".xlsx")){
+                    fnv.exportToFile(f);
+                }
+            }
+        });
+
+        VBox fnBox = new VBox();
+        fnBox.setSpacing(5);
+        fnBox.setPadding(new Insets(10, 0, 0, 10));
+        fnBox.getChildren().addAll(fnv, fnvButton);
+        fnTab.setContent(fnBox);
 
         /* Setup Blue tab */
         Tab blueTab = new Tab("Blue");
@@ -142,7 +162,7 @@ public class SAnalytics extends Application {
         dowsv.setItems(dowsvData);
 
         Button dowsvButton = new Button("Export");
-        dpsvButton.setOnAction(new EventHandler<ActionEvent>() {
+        dowsvButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 FileChooser fc = new FileChooser();
@@ -168,7 +188,7 @@ public class SAnalytics extends Application {
         domsv.setItems(domsvData);
 
         Button domsvButton = new Button("Export");
-        dpsvButton.setOnAction(new EventHandler<ActionEvent>() {
+        domsvButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 FileChooser fc = new FileChooser();
@@ -187,7 +207,7 @@ public class SAnalytics extends Application {
         yellowTab.setContent(ylBox);
 
 
-        tabPane.getTabs().addAll(dailyTab, finalTab, blueTab, redTab, greenTab, yellowTab);
+        tabPane.getTabs().addAll(dailyTab, fnTab, blueTab, redTab, greenTab, yellowTab);
 
         Group root = new Group();
         Scene scene = new Scene(root, 1500, 600);
