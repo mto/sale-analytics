@@ -4,6 +4,7 @@ import com.cca.sanalytics.jfx.model.DOMTotalSale;
 import com.cca.sanalytics.jfx.model.DOWSale;
 import com.cca.sanalytics.jfx.model.DOWTotalSale;
 import com.cca.sanalytics.jfx.model.DPSale;
+import com.cca.sanalytics.jfx.model.FinalData;
 import com.cca.sanalytics.jfx.view.DOWSaleView;
 import com.cca.sanalytics.jfx.view.DOWTotalSaleView;
 import com.cca.sanalytics.jfx.view.DPSaleView;
@@ -80,6 +81,8 @@ public class SAnalytics extends Application {
         /* Setup Final tab */
         Tab fnTab = new Tab("Final");
         final FinalView fnv = new FinalView();
+        final ObservableList<FinalData> fdatas = FXCollections.observableArrayList(dbLoader.getFinalDatas().values());
+        fnv.setItems(fdatas);
 
         Button fnvButton = new Button("Export");
         fnvButton.setOnAction(new EventHandler<ActionEvent>() {

@@ -1,13 +1,14 @@
 package com.cca.sanalytics.service;
 
+import com.cca.sanalytics.config.Configuration;
 import com.cca.sanalytics.jfx.model.DOMSale;
 import com.cca.sanalytics.jfx.model.DOMTotalSale;
 import com.cca.sanalytics.jfx.model.DOWSale;
 import com.cca.sanalytics.jfx.model.DOWTotalSale;
 import com.cca.sanalytics.jfx.model.DPSale;
+import com.cca.sanalytics.jfx.model.FinalData;
 import com.cca.sanalytics.util.DateUtil;
 import com.cca.sanalytics.util.StringUtil;
-import com.cca.sanalytics.config.Configuration;
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 import java.sql.Connection;
@@ -41,6 +42,12 @@ public class DataLoader {
     private final List<DOMSale> domSales = new ArrayList<DOMSale>();
 
     private final List<DOWSale> dowSales = new ArrayList<DOWSale>();
+
+    private final Map<String, Integer> mykTotalSale = new HashMap<String, Integer>();
+
+    private final Map<String, Map<String, FinalData>> mykDatas = new HashMap<String, Map<String, FinalData>>();
+
+    private final Map<String, FinalData> finalDatas = new HashMap<String, FinalData>();
 
     private final Map<String, DOWTotalSale> dowTotalSales = new HashMap<String, DOWTotalSale>();
 
@@ -137,6 +144,8 @@ public class DataLoader {
 
                 dpSales.add(dpsRecord);
 
+                extractFinalData(fsd, ssd, tsd, fosd, fisd, result);
+
                 DOMSale doms = new DOMSale();
                 doms.index.set(index);
                 doms.firstSaleDom.set(DateUtil.extractDOM(fsd));
@@ -174,11 +183,65 @@ public class DataLoader {
                 extractDOMTTS(fsdom, ssdom, tsdom, fosdom, fisdom, result);
             }
 
+            computeFinalData();
             computeDOWTTSPercentage();
             computeDOMTTSPercentage();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void extractFinalData(String fsd, String ssd, String tsd, String fosd, String fisd, final ResultSet result) {
+        if (StringUtil.notNullOrEmpty(fsd)) {
+            FinalData fd = getFinalData(fsd);
+
+            try {
+                fd.count += result.getInt("first_sale_date_amount");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (StringUtil.notNullOrEmpty(ssd)) {
+            FinalData fd = getFinalData(ssd);
+
+            try {
+                fd.count += result.getInt("second_sale_date_amount");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (StringUtil.notNullOrEmpty(tsd)) {
+            FinalData fd = getFinalData(tsd);
+
+            try {
+                fd.count += result.getInt("third_sale_date_amount");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (StringUtil.notNullOrEmpty(fosd)) {
+            FinalData fd = getFinalData(fosd);
+
+            try {
+                fd.count += result.getInt("fourth_sale_date_amount");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        if (StringUtil.notNullOrEmpty(fisd)) {
+            FinalData fd = getFinalData(fisd);
+
+            try {
+                fd.count += result.getInt("fifth_sale_date_amount");
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }
 
     private void extractDOWTTS(String fsdow, String ssdow, String tsdow, String fosdow, String fisdow, final ResultSet result) {
@@ -289,6 +352,33 @@ public class DataLoader {
 
     }
 
+    private void computeFinalData() {
+        for (String date : finalDatas.keySet()) {
+            FinalData fd = finalDatas.get(date);
+            String myk = fd.getMonYearKey();
+
+            Map<String, FinalData> sameMonFds = getFinalDatasWithMYK(myk);
+            int nbd = sameMonFds.size();
+
+            //fd.daysInMon.set("" + nbd);
+            Integer sum = mykTotalSale.get(myk);
+            if (sum == null) {
+                int s = 0;
+                for (FinalData f : sameMonFds.values()) {
+                    s += f.count;
+                }
+
+                sum = s;
+
+                mykTotalSale.put(myk, sum);
+            }
+
+            double pcim = (fd.count * 100.0 * nbd) / sum;
+
+            fd.percentageInMonth.set("" + pcim + "%");
+        }
+    }
+
     private void computeDOWTTSPercentage() {
         int sumOfDOWtts = 0;
         for (DOWTotalSale v : dowTotalSales.values()) {
@@ -361,6 +451,38 @@ public class DataLoader {
         return domtts;
     }
 
+    private FinalData getFinalData(String date) {
+        FinalData fd = finalDatas.get(date);
+
+        if (fd == null) {
+            fd = new FinalData();
+            fd.date.set(date);
+            fd.dom.set(DateUtil.extractDOM(date));
+            fd.dow.set(DateUtil.extractDOW(date));
+
+            String myk = DateUtil.extractMYKey(date);
+            fd.monYearKey.set(myk);
+
+            finalDatas.put(date, fd);
+
+            getFinalDatasWithMYK(myk).put(date, fd);
+        }
+
+        return fd;
+    }
+
+    private Map<String, FinalData> getFinalDatasWithMYK(String mykey) {
+        Map<String, FinalData> fds = mykDatas.get(mykey);
+
+        if (fds == null) {
+            fds = new HashMap<String, FinalData>();
+
+            mykDatas.put(mykey, fds);
+        }
+
+        return fds;
+    }
+
     public List<DPSale> getDPSales() {
         loadDPSales();
 
@@ -389,5 +511,11 @@ public class DataLoader {
         loadDPSales();
 
         return Collections.unmodifiableMap(domTotalSales);
+    }
+
+    public Map<String, FinalData> getFinalDatas() {
+        loadDPSales();
+
+        return Collections.unmodifiableMap(finalDatas);
     }
 }

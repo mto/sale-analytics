@@ -17,6 +17,16 @@ public class DateUtil {
         return tokens.length == 3 ? tokens[1] : "";
     }
 
+    public static String extractMYKey(String mm_dd_yyyy){
+        if (mm_dd_yyyy == null || mm_dd_yyyy.isEmpty()) {
+            return null;
+        }
+
+        String[] tokens = mm_dd_yyyy.split("/");
+
+        return tokens.length == 3 ? (tokens[0] + "-" + tokens[2]) : "";
+    }
+
     public static String extractDOW(String mm_dd_yyyy) {
         if (mm_dd_yyyy == null || mm_dd_yyyy.isEmpty()) {
             return "";
