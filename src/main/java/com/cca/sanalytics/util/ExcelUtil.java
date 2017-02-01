@@ -44,6 +44,10 @@ public class ExcelUtil {
         }
 
         try{
+            if(!f.getAbsolutePath().endsWith(".xlsx")){
+                f = new File(f.getAbsolutePath() + ".xlsx");
+            }
+
             if(f.exists() && f.isFile()) {
                 f.delete();
             }

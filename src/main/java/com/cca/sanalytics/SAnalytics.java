@@ -66,9 +66,7 @@ public class SAnalytics extends Application {
                 FileChooser fc = new FileChooser();
                 fc.setTitle("Export data to Excel");
                 File f = fc.showSaveDialog(primaryStage);
-                if(f!= null && f.getName().endsWith(".xlsx")){
-                    dpsv.exportToFile(f);
-                }
+                dpsv.exportToFile(f);
             }
         });
 
@@ -90,9 +88,7 @@ public class SAnalytics extends Application {
                 FileChooser fc = new FileChooser();
                 fc.setTitle("Export data to Excel");
                 File f = fc.showSaveDialog(primaryStage);
-                if(f!= null && f.getName().endsWith(".xlsx")){
-                    fnv.exportToFile(f);
-                }
+                fnv.exportToFile(f);
             }
         });
 
@@ -114,9 +110,7 @@ public class SAnalytics extends Application {
                 FileChooser fc = new FileChooser();
                 fc.setTitle("Export data to Excel");
                 File f = fc.showSaveDialog(primaryStage);
-                if(f!= null && f.getName().endsWith(".xlsx")){
-                    domttsv.exportToFile(f);
-                }
+                domttsv.exportToFile(f);
             }
         });
 
@@ -140,9 +134,7 @@ public class SAnalytics extends Application {
                 FileChooser fc = new FileChooser();
                 fc.setTitle("Export data to Excel");
                 File f = fc.showSaveDialog(primaryStage);
-                if(f!= null && f.getName().endsWith(".xlsx")){
-                    dowttsv.exportToFile(f);
-                }
+                dowttsv.exportToFile(f);
             }
         });
 
@@ -166,9 +158,7 @@ public class SAnalytics extends Application {
                 FileChooser fc = new FileChooser();
                 fc.setTitle("Export data to Excel");
                 File f = fc.showSaveDialog(primaryStage);
-                if(f!= null && f.getName().endsWith(".xlsx")){
-                    dowsv.exportToFile(f);
-                }
+                dowsv.exportToFile(f);
             }
         });
 
@@ -191,9 +181,7 @@ public class SAnalytics extends Application {
                 FileChooser fc = new FileChooser();
                 fc.setTitle("Export data to Excel");
                 File f = fc.showSaveDialog(primaryStage);
-                if(f!= null && f.getName().endsWith(".xlsx")){
-                    domsv.exportToFile(f);
-                }
+                domsv.exportToFile(f);
             }
         });
 
