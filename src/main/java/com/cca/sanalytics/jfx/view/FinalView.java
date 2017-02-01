@@ -21,9 +21,10 @@ public class FinalView extends TableView<FinalData> implements Exportable {
         TableColumn<FinalData, String> dom = new TableColumn<FinalData, String>("DOM");
         TableColumn<FinalData, String> dow = new TableColumn<FinalData, String>("DOW");
         TableColumn<FinalData, String> daysInMon = new TableColumn<FinalData, String>("Days/Mon");
-        TableColumn<FinalData, String> pcInMon = new TableColumn<FinalData, String>("% in Month");
-        TableColumn<FinalData, String> monYearKey = new TableColumn<FinalData, String>("Mo-Year-Key");
-        TableColumn<FinalData, String> cumPercent = new TableColumn<FinalData, String>("Cumulative %");
+        TableColumn<FinalData, String> pcInMon = new TableColumn<FinalData, String>("PercentInMonth");
+        TableColumn<FinalData, String> daySequence = new TableColumn<FinalData, String>("DaySequence");
+        TableColumn<FinalData, String> monYearKey = new TableColumn<FinalData, String>("MonthYearKey");
+        TableColumn<FinalData, String> cumPercent = new TableColumn<FinalData, String>("CumulativePercentage");
 
         date.setCellValueFactory(new PropertyValueFactory<FinalData, String>("date"));
         dom.setCellValueFactory(new PropertyValueFactory<FinalData, String>("dom"));
@@ -34,7 +35,7 @@ public class FinalView extends TableView<FinalData> implements Exportable {
         cumPercent.setCellValueFactory(new PropertyValueFactory<FinalData, String>("cumulative"));
 
 
-        getColumns().addAll(date, dom, dow, daysInMon, pcInMon, monYearKey, cumPercent);
+        getColumns().addAll(date, dom, dow, daysInMon, pcInMon, daySequence, monYearKey, cumPercent);
     }
 
     @Override
