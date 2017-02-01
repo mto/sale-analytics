@@ -99,7 +99,7 @@ public class SAnalytics extends Application {
         fnTab.setContent(fnBox);
 
         /* Setup Blue tab */
-        Tab blueTab = new Tab("Blue");
+        Tab blueTab = new Tab("DOM Sales");
         final DOMTotalSaleView domttsv = new DOMTotalSaleView();
         final ObservableList<DOMTotalSale> domttsvData = FXCollections.observableArrayList(dbLoader.getDOMTotalSales().values());
         domttsv.setItems(domttsvData);
@@ -123,7 +123,7 @@ public class SAnalytics extends Application {
 
 
         /* Setup Red tab */
-        Tab redTab = new Tab("Red");
+        Tab redTab = new Tab("DOW Sales");
         final DOWTotalSaleView dowttsv = new DOWTotalSaleView();
         final ObservableList<DOWTotalSale> dowttsvData = FXCollections.observableArrayList(dbLoader.getDOWTotalSales().values());
         dowttsv.setItems(dowttsvData);
@@ -147,6 +147,7 @@ public class SAnalytics extends Application {
 
         
         /* Setup Green tab */
+        /*
         Tab greenTab = new Tab("Green");
         final DOWSaleView dowsv = new DOWSaleView();
         final ObservableList<DOWSale> dowsvData = FXCollections.observableArrayList(dbLoader.getDOWSales());
@@ -168,8 +169,10 @@ public class SAnalytics extends Application {
         greenBox.getChildren().addAll(dowsv, dowsvButton);
 
         greenTab.setContent(greenBox);
+        */
 
         /* Setup Yello tab */
+        /*
         Tab yellowTab = new Tab("Yellow");
         final DOMSaleView domsv = new DOMSaleView();
         final ObservableList<DOMSale> domsvData = FXCollections.observableArrayList(dbLoader.getDOMSales());
@@ -190,9 +193,10 @@ public class SAnalytics extends Application {
         ylBox.setPadding(new Insets(10, 0, 0, 10));
         ylBox.getChildren().addAll(domsv, domsvButton);
         yellowTab.setContent(ylBox);
+        */
 
-
-        tabPane.getTabs().addAll(dailyTab, fnTab, blueTab, redTab, greenTab, yellowTab);
+        //tabPane.getTabs().addAll(dailyTab, fnTab, blueTab, redTab, greenTab, yellowTab);
+        tabPane.getTabs().addAll(dailyTab, fnTab, blueTab, redTab);
 
         Group root = new Group();
         Scene scene = new Scene(root, 1500, 600);
