@@ -23,10 +23,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-/**
- * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
- * @date: 1/22/17
- */
+
 public class DataLoader {
 
     private static volatile DataLoader instance;
@@ -90,102 +87,112 @@ public class DataLoader {
         return instance;
     }
 
-    public void loadDPSales() {
+    public void loadDPSales(String dealerNo, String schema) {
         if (!dpSalesLoaded.get()) {
             synchronized (lock) {
                 if (!dpSalesLoaded.get()) {
-                    _loadDPSales();
+                    _loadDPSales(dealerNo, schema);
                     dpSalesLoaded.set(true);
                 }
             }
         }
     }
 
-    private void _loadDPSales() {
-        Connection conn;
-        PreparedStatement pstmt;
-        ResultSet result;
+    private void _loadDPSales(String dealerNo, String schema) {
 
-        try {
-            conn = comboDS.getConnection();
-            pstmt = conn.prepareStatement("select * from dealer_part_sales");
+        try (Connection conn = comboDS.getConnection()) {
+    		String recentPartSalesQuery = "select PART_NO, SALES_DATE1, SALES_AMOUNT1, LOST_SALES_AMOUNT1, "
+    				+ "SALES_DATE2, SALES_AMOUNT2, LOST_SALES_AMOUNT2, "
+    				+ "SALES_DATE3, SALES_AMOUNT3, LOST_SALES_AMOUNT3, "
+    				+ "SALES_DATE4, SALES_AMOUNT4, LOST_SALES_AMOUNT4, "
+    				+ "SALES_DATE5, SALES_AMOUNT5, LOST_SALES_AMOUNT5 "
+    				+ "from %s.part_sale_tab "
+    				+ "where DEALER_NO = ? "
+    				+ "and IMPORTER_NO = 'USA' "
+    				+ "and MARKET = 'XX' ";
+    		recentPartSalesQuery = String.format(recentPartSalesQuery, schema);
 
-            result = pstmt.executeQuery();
+            try (PreparedStatement pstmt = conn.prepareStatement(recentPartSalesQuery)) {
+            	pstmt.setString(1, dealerNo);
 
-            int index = 0;
+	           try (ResultSet result = pstmt.executeQuery()) {
 
-            while (result.next()) {
-                index++;
+		           int index = 0;
 
-                DPSale dpsRecord = new DPSale();
-                dpsRecord.index.set(index);
-                dpsRecord.dealerNumber.set(result.getString("dealer_number"));
-                dpsRecord.partNumber.set(result.getString("part_number"));
+		           while (result.next()) {
+		               index++;
 
-                String fsd = result.getString("first_sale_date");
-                dpsRecord.firstSaleDate.set(fsd);
-                dpsRecord.firstSaleAmount.set(result.getInt("first_sale_date_amount"));
+		               DPSale dpsRecord = new DPSale();
+		               dpsRecord.index.set(index);
+		               dpsRecord.dealerNumber.set(dealerNo);
+		               dpsRecord.partNumber.set(result.getString("PART_NO"));
 
-                String ssd = result.getString("second_sale_date");
-                dpsRecord.secondSaleDate.set(ssd);
-                dpsRecord.secondSaleAmount.set(result.getInt("second_sale_date_amount"));
+		               String fsd = result.getString("SALES_DATE1");
+		               dpsRecord.firstSaleDate.set(fsd);
+		               dpsRecord.firstSaleAmount.set(result.getInt("SALES_AMOUNT1"));
 
-                String tsd = result.getString("third_sale_date");
-                dpsRecord.thirdSaleDate.set(tsd);
-                dpsRecord.thirdSaleAmount.set(result.getInt("third_sale_date_amount"));
+		               String ssd = result.getString("SALES_DATE2");
+		               dpsRecord.secondSaleDate.set(ssd);
+		               dpsRecord.secondSaleAmount.set(result.getInt("SALES_AMOUNT2"));
 
-                String fosd = result.getString("fourth_sale_date");
-                dpsRecord.fourthSaleDate.set(fosd);
-                dpsRecord.fourthSaleAmount.set(result.getInt("fourth_sale_date_amount"));
+		               String tsd = result.getString("SALES_DATE3");
+		               dpsRecord.thirdSaleDate.set(tsd);
+		               dpsRecord.thirdSaleAmount.set(result.getInt("SALES_AMOUNT3"));
 
-                String fisd = result.getString("fifth_sale_date");
-                dpsRecord.fifthSaleDate.set(fisd);
-                dpsRecord.fifthSaleAmount.set(result.getInt("fifth_sale_date_amount"));
+		               String fosd = result.getString("SALES_DATE4");
+		               dpsRecord.fourthSaleDate.set(fosd);
+		               dpsRecord.fourthSaleAmount.set(result.getInt("SALES_AMOUNT4"));
 
-                dpSales.add(dpsRecord);
+		               String fisd = result.getString("SALES_DATE5");
+		               dpsRecord.fifthSaleDate.set(fisd);
+		               dpsRecord.fifthSaleAmount.set(result.getInt("SALES_AMOUNT5"));
 
-                extractFinalData(fsd, ssd, tsd, fosd, fisd, result);
+		               dpSales.add(dpsRecord);
 
-                DOMSale doms = new DOMSale();
-                doms.index.set(index);
-                doms.firstSaleDom.set(DateUtil.extractDOM(fsd));
-                doms.secondSaleDom.set(DateUtil.extractDOM(ssd));
-                doms.thirdSaleDom.set(DateUtil.extractDOM(tsd));
-                doms.fourthSaleDom.set(DateUtil.extractDOM(fosd));
-                doms.fifthSaleDom.set(DateUtil.extractDOM(fisd));
+		               extractFinalData(fsd, ssd, tsd, fosd, fisd, result);
 
-                domSales.add(doms);
+		               DOMSale doms = new DOMSale();
+		               doms.index.set(index);
+		               doms.firstSaleDom.set(DateUtil.extractDOM(fsd));
+		               doms.secondSaleDom.set(DateUtil.extractDOM(ssd));
+		               doms.thirdSaleDom.set(DateUtil.extractDOM(tsd));
+		               doms.fourthSaleDom.set(DateUtil.extractDOM(fosd));
+		               doms.fifthSaleDom.set(DateUtil.extractDOM(fisd));
 
-                String fsdow = DateUtil.extractDOW(fsd);
-                String ssdow = DateUtil.extractDOW(ssd);
-                String tsdow = DateUtil.extractDOW(tsd);
-                String fosdow = DateUtil.extractDOW(fosd);
-                String fisdow = DateUtil.extractDOW(fisd);
+		               domSales.add(doms);
 
-                DOWSale dows = new DOWSale();
-                dows.index.set(index);
-                dows.firstSaleDow.set(fsdow);
-                dows.secondSaleDow.set(ssdow);
-                dows.thirdSaleDow.set(tsdow);
-                dows.fourthSaleDow.set(fosdow);
-                dows.fifthSaleDow.set(fisdow);
+		               String fsdow = DateUtil.extractDOW(fsd);
+		               String ssdow = DateUtil.extractDOW(ssd);
+		               String tsdow = DateUtil.extractDOW(tsd);
+		               String fosdow = DateUtil.extractDOW(fosd);
+		               String fisdow = DateUtil.extractDOW(fisd);
 
-                dowSales.add(dows);
+		               DOWSale dows = new DOWSale();
+		               dows.index.set(index);
+		               dows.firstSaleDow.set(fsdow);
+		               dows.secondSaleDow.set(ssdow);
+		               dows.thirdSaleDow.set(tsdow);
+		               dows.fourthSaleDow.set(fosdow);
+		               dows.fifthSaleDow.set(fisdow);
 
-                extractDOWTTS(fsdow, ssdow, tsdow, fosdow, fisdow, result);
+		               dowSales.add(dows);
 
-                String fsdom = DateUtil.extractDOM(fsd);
-                String ssdom = DateUtil.extractDOM(ssd);
-                String tsdom = DateUtil.extractDOM(tsd);
-                String fosdom = DateUtil.extractDOM(fosd);
-                String fisdom = DateUtil.extractDOM(fisd);
+		               extractDOWTTS(fsdow, ssdow, tsdow, fosdow, fisdow, result);
 
-                extractDOMTTS(fsdom, ssdom, tsdom, fosdom, fisdom, result);
+		               String fsdom = DateUtil.extractDOM(fsd);
+		               String ssdom = DateUtil.extractDOM(ssd);
+		               String tsdom = DateUtil.extractDOM(tsd);
+		               String fosdom = DateUtil.extractDOM(fosd);
+		               String fisdom = DateUtil.extractDOM(fisd);
+
+		               extractDOMTTS(fsdom, ssdom, tsdom, fosdom, fisdom, result);
+		           }
+
+		           computeFinalData();
+		           computeDOWTTSPercentage();
+		           computeDOMTTSPercentage();
+	           }
             }
-
-            computeFinalData();
-            computeDOWTTSPercentage();
-            computeDOMTTSPercentage();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -196,7 +203,7 @@ public class DataLoader {
             FinalData fd = getFinalData(fsd);
 
             try {
-                fd.count += result.getInt("first_sale_date_amount");
+                fd.count += result.getInt("SALES_AMOUNT1");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -206,7 +213,7 @@ public class DataLoader {
             FinalData fd = getFinalData(ssd);
 
             try {
-                fd.count += result.getInt("second_sale_date_amount");
+                fd.count += result.getInt("SALES_AMOUNT2");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -216,7 +223,7 @@ public class DataLoader {
             FinalData fd = getFinalData(tsd);
 
             try {
-                fd.count += result.getInt("third_sale_date_amount");
+                fd.count += result.getInt("SALES_AMOUNT3");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -226,7 +233,7 @@ public class DataLoader {
             FinalData fd = getFinalData(fosd);
 
             try {
-                fd.count += result.getInt("fourth_sale_date_amount");
+                fd.count += result.getInt("SALES_AMOUNT4");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -236,7 +243,7 @@ public class DataLoader {
             FinalData fd = getFinalData(fisd);
 
             try {
-                fd.count += result.getInt("fifth_sale_date_amount");
+                fd.count += result.getInt("SALES_AMOUNT5");
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
@@ -248,7 +255,7 @@ public class DataLoader {
         if (StringUtil.notNullOrEmpty(fsdow)) {
             DOWTotalSale dowtts = getDOWTotalSale(fsdow);
             try {
-                int count = dowtts.getCount() + result.getInt("first_sale_date_amount");
+                int count = dowtts.getCount() + result.getInt("SALES_AMOUNT1");
                 dowtts.count.set(count);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -258,7 +265,7 @@ public class DataLoader {
         if (StringUtil.notNullOrEmpty(ssdow)) {
             DOWTotalSale dowtts = getDOWTotalSale(ssdow);
             try {
-                int count = dowtts.getCount() + result.getInt("second_sale_date_amount");
+                int count = dowtts.getCount() + result.getInt("SALES_AMOUNT2");
                 dowtts.count.set(count);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -269,7 +276,7 @@ public class DataLoader {
         if (StringUtil.notNullOrEmpty(tsdow)) {
             DOWTotalSale dowtts = getDOWTotalSale(tsdow);
             try {
-                int count = dowtts.getCount() + result.getInt("third_sale_date_amount");
+                int count = dowtts.getCount() + result.getInt("SALES_AMOUNT3");
                 dowtts.count.set(count);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -280,7 +287,7 @@ public class DataLoader {
         if (StringUtil.notNullOrEmpty(fosdow)) {
             DOWTotalSale dowtts = getDOWTotalSale(fosdow);
             try {
-                int count = dowtts.getCount() + result.getInt("fourth_sale_date_amount");
+                int count = dowtts.getCount() + result.getInt("SALES_AMOUNT4");
                 dowtts.count.set(count);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -291,7 +298,7 @@ public class DataLoader {
         if (StringUtil.notNullOrEmpty(fisdow)) {
             DOWTotalSale dowtts = getDOWTotalSale(fisdow);
             try {
-                int count = dowtts.getCount() + result.getInt("fifth_sale_date_amount");
+                int count = dowtts.getCount() + result.getInt("SALES_AMOUNT5");
                 dowtts.count.set(count);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -303,7 +310,7 @@ public class DataLoader {
         if (StringUtil.notNullOrEmpty(fsdom)) {
             DOMTotalSale domtts = getDOMTotalSale(fsdom);
             try {
-                int count = domtts.getCount() + result.getInt("first_sale_date_amount");
+                int count = domtts.getCount() + result.getInt("SALES_AMOUNT1");
                 domtts.count.set(count);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -313,7 +320,7 @@ public class DataLoader {
         if (StringUtil.notNullOrEmpty(ssdom)) {
             DOMTotalSale domtts = getDOMTotalSale(ssdom);
             try {
-                int count = domtts.getCount() + result.getInt("second_sale_date_amount");
+                int count = domtts.getCount() + result.getInt("SALES_AMOUNT2");
                 domtts.count.set(count);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -323,7 +330,7 @@ public class DataLoader {
         if (StringUtil.notNullOrEmpty(tsdom)) {
             DOMTotalSale domtts = getDOMTotalSale(tsdom);
             try {
-                int count = domtts.getCount() + result.getInt("third_sale_date_amount");
+                int count = domtts.getCount() + result.getInt("SALES_AMOUNT3");
                 domtts.count.set(count);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -333,7 +340,7 @@ public class DataLoader {
         if (StringUtil.notNullOrEmpty(fosdom)) {
             DOMTotalSale domtts = getDOMTotalSale(fosdom);
             try {
-                int count = domtts.getCount() + result.getInt("fourth_sale_date_amount");
+                int count = domtts.getCount() + result.getInt("SALES_AMOUNT4");
                 domtts.count.set(count);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -343,7 +350,7 @@ public class DataLoader {
         if (StringUtil.notNullOrEmpty(fisdom)) {
             DOMTotalSale domtts = getDOMTotalSale(fisdom);
             try {
-                int count = domtts.getCount() + result.getInt("fifth_sale_date_amount");
+                int count = domtts.getCount() + result.getInt("SALES_AMOUNT5");
                 domtts.count.set(count);
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -483,8 +490,12 @@ public class DataLoader {
         return fds;
     }
 
+    private void loadDPSales() {
+        loadDPSales("519138", "RIMSPO_OPT");
+    }
+
     public List<DPSale> getDPSales() {
-        loadDPSales();
+    	loadDPSales();
 
         return Collections.unmodifiableList(dpSales);
     }
