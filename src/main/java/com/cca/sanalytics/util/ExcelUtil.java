@@ -59,7 +59,7 @@ public class ExcelUtil {
             workbook.close();
 
         }catch(Exception ex){
-
+            ex.printStackTrace();
         }
 
     }

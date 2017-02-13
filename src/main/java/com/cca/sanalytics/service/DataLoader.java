@@ -34,21 +34,21 @@ public class DataLoader {
 
     private final ComboPooledDataSource comboDS;
 
-    private final List<DPSale> dpSales = new ArrayList<DPSale>();
+    private final List<DPSale> dpSales = new ArrayList<>();
 
-    private final List<DOMSale> domSales = new ArrayList<DOMSale>();
+    private final List<DOMSale> domSales = new ArrayList<>();
 
-    private final List<DOWSale> dowSales = new ArrayList<DOWSale>();
+    private final List<DOWSale> dowSales = new ArrayList<>();
 
-    private final Map<String, Integer> mykTotalSale = new HashMap<String, Integer>();
+    private final Map<String, Integer> mykTotalSale = new HashMap<>();
 
-    private final Map<String, Map<String, FinalData>> mykDatas = new HashMap<String, Map<String, FinalData>>();
+    private final Map<String, Map<String, FinalData>> mykDatas = new HashMap<>();
 
-    private final Map<String, FinalData> finalDatas = new HashMap<String, FinalData>();
+    private final Map<String, FinalData> finalDatas = new HashMap<>();
 
-    private final Map<String, DOWTotalSale> dowTotalSales = new HashMap<String, DOWTotalSale>();
+    private final Map<String, DOWTotalSale> dowTotalSales = new HashMap<>();
 
-    private final Map<String, DOMTotalSale> domTotalSales = new TreeMap<String, DOMTotalSale>(new Comparator<String>() {
+    private final Map<String, DOMTotalSale> domTotalSales = new TreeMap<>(new Comparator<String>() {
         public int compare(String o1, String o2) {
             try {
                 int n1 = Integer.parseInt(o1);
@@ -101,97 +101,97 @@ public class DataLoader {
     private void _loadDPSales(String dealerNo, String schema) {
 
         try (Connection conn = comboDS.getConnection()) {
-    		String recentPartSalesQuery = "select PART_NO, SALES_DATE1, SALES_AMOUNT1, LOST_SALES_AMOUNT1, "
-    				+ "SALES_DATE2, SALES_AMOUNT2, LOST_SALES_AMOUNT2, "
-    				+ "SALES_DATE3, SALES_AMOUNT3, LOST_SALES_AMOUNT3, "
-    				+ "SALES_DATE4, SALES_AMOUNT4, LOST_SALES_AMOUNT4, "
-    				+ "SALES_DATE5, SALES_AMOUNT5, LOST_SALES_AMOUNT5 "
-    				+ "from %s.part_sale_tab "
-    				+ "where DEALER_NO = ? "
-    				+ "and IMPORTER_NO = 'USA' "
-    				+ "and MARKET = 'XX' ";
-    		recentPartSalesQuery = String.format(recentPartSalesQuery, schema);
+            String recentPartSalesQuery = "select PART_NO, SALES_DATE1, SALES_AMOUNT1, LOST_SALES_AMOUNT1, "
+                    + "SALES_DATE2, SALES_AMOUNT2, LOST_SALES_AMOUNT2, "
+                    + "SALES_DATE3, SALES_AMOUNT3, LOST_SALES_AMOUNT3, "
+                    + "SALES_DATE4, SALES_AMOUNT4, LOST_SALES_AMOUNT4, "
+                    + "SALES_DATE5, SALES_AMOUNT5, LOST_SALES_AMOUNT5 "
+                    + "from %s.part_sale_tab "
+                    + "where DEALER_NO = ? "
+                    + "and IMPORTER_NO = 'USA' "
+                    + "and MARKET = 'XX' ";
+            recentPartSalesQuery = String.format(recentPartSalesQuery, schema);
 
             try (PreparedStatement pstmt = conn.prepareStatement(recentPartSalesQuery)) {
-            	pstmt.setString(1, dealerNo);
+                pstmt.setString(1, dealerNo);
 
-	           try (ResultSet result = pstmt.executeQuery()) {
+                try (ResultSet result = pstmt.executeQuery()) {
 
-		           int index = 0;
+                    int index = 0;
 
-		           while (result.next()) {
-		               index++;
+                    while (result.next()) {
+                        index++;
 
-		               DPSale dpsRecord = new DPSale();
-		               dpsRecord.index.set(index);
-		               dpsRecord.dealerNumber.set(dealerNo);
-		               dpsRecord.partNumber.set(result.getString("PART_NO"));
+                        DPSale dpsRecord = new DPSale();
+                        dpsRecord.index.set(index);
+                        dpsRecord.dealerNumber.set(dealerNo);
+                        dpsRecord.partNumber.set(result.getString("PART_NO"));
 
-		               String fsd = result.getString("SALES_DATE1");
-		               dpsRecord.firstSaleDate.set(fsd);
-		               dpsRecord.firstSaleAmount.set(result.getInt("SALES_AMOUNT1"));
+                        String fsd = result.getString("SALES_DATE1");
+                        dpsRecord.firstSaleDate.set(fsd);
+                        dpsRecord.firstSaleAmount.set(result.getInt("SALES_AMOUNT1"));
 
-		               String ssd = result.getString("SALES_DATE2");
-		               dpsRecord.secondSaleDate.set(ssd);
-		               dpsRecord.secondSaleAmount.set(result.getInt("SALES_AMOUNT2"));
+                        String ssd = result.getString("SALES_DATE2");
+                        dpsRecord.secondSaleDate.set(ssd);
+                        dpsRecord.secondSaleAmount.set(result.getInt("SALES_AMOUNT2"));
 
-		               String tsd = result.getString("SALES_DATE3");
-		               dpsRecord.thirdSaleDate.set(tsd);
-		               dpsRecord.thirdSaleAmount.set(result.getInt("SALES_AMOUNT3"));
+                        String tsd = result.getString("SALES_DATE3");
+                        dpsRecord.thirdSaleDate.set(tsd);
+                        dpsRecord.thirdSaleAmount.set(result.getInt("SALES_AMOUNT3"));
 
-		               String fosd = result.getString("SALES_DATE4");
-		               dpsRecord.fourthSaleDate.set(fosd);
-		               dpsRecord.fourthSaleAmount.set(result.getInt("SALES_AMOUNT4"));
+                        String fosd = result.getString("SALES_DATE4");
+                        dpsRecord.fourthSaleDate.set(fosd);
+                        dpsRecord.fourthSaleAmount.set(result.getInt("SALES_AMOUNT4"));
 
-		               String fisd = result.getString("SALES_DATE5");
-		               dpsRecord.fifthSaleDate.set(fisd);
-		               dpsRecord.fifthSaleAmount.set(result.getInt("SALES_AMOUNT5"));
+                        String fisd = result.getString("SALES_DATE5");
+                        dpsRecord.fifthSaleDate.set(fisd);
+                        dpsRecord.fifthSaleAmount.set(result.getInt("SALES_AMOUNT5"));
 
-		               dpSales.add(dpsRecord);
+                        dpSales.add(dpsRecord);
 
-		               extractFinalData(fsd, ssd, tsd, fosd, fisd, result);
+                        extractFinalData(fsd, ssd, tsd, fosd, fisd, result);
 
-		               DOMSale doms = new DOMSale();
-		               doms.index.set(index);
-		               doms.firstSaleDom.set(DateUtil.extractDOM(fsd));
-		               doms.secondSaleDom.set(DateUtil.extractDOM(ssd));
-		               doms.thirdSaleDom.set(DateUtil.extractDOM(tsd));
-		               doms.fourthSaleDom.set(DateUtil.extractDOM(fosd));
-		               doms.fifthSaleDom.set(DateUtil.extractDOM(fisd));
+                        DOMSale doms = new DOMSale();
+                        doms.index.set(index);
+                        doms.firstSaleDom.set(DateUtil.extractDOM(fsd));
+                        doms.secondSaleDom.set(DateUtil.extractDOM(ssd));
+                        doms.thirdSaleDom.set(DateUtil.extractDOM(tsd));
+                        doms.fourthSaleDom.set(DateUtil.extractDOM(fosd));
+                        doms.fifthSaleDom.set(DateUtil.extractDOM(fisd));
 
-		               domSales.add(doms);
+                        domSales.add(doms);
 
-		               String fsdow = DateUtil.extractDOW(fsd);
-		               String ssdow = DateUtil.extractDOW(ssd);
-		               String tsdow = DateUtil.extractDOW(tsd);
-		               String fosdow = DateUtil.extractDOW(fosd);
-		               String fisdow = DateUtil.extractDOW(fisd);
+                        String fsdow = DateUtil.extractDOW(fsd);
+                        String ssdow = DateUtil.extractDOW(ssd);
+                        String tsdow = DateUtil.extractDOW(tsd);
+                        String fosdow = DateUtil.extractDOW(fosd);
+                        String fisdow = DateUtil.extractDOW(fisd);
 
-		               DOWSale dows = new DOWSale();
-		               dows.index.set(index);
-		               dows.firstSaleDow.set(fsdow);
-		               dows.secondSaleDow.set(ssdow);
-		               dows.thirdSaleDow.set(tsdow);
-		               dows.fourthSaleDow.set(fosdow);
-		               dows.fifthSaleDow.set(fisdow);
+                        DOWSale dows = new DOWSale();
+                        dows.index.set(index);
+                        dows.firstSaleDow.set(fsdow);
+                        dows.secondSaleDow.set(ssdow);
+                        dows.thirdSaleDow.set(tsdow);
+                        dows.fourthSaleDow.set(fosdow);
+                        dows.fifthSaleDow.set(fisdow);
 
-		               dowSales.add(dows);
+                        dowSales.add(dows);
 
-		               extractDOWTTS(fsdow, ssdow, tsdow, fosdow, fisdow, result);
+                        extractDOWTTS(fsdow, ssdow, tsdow, fosdow, fisdow, result);
 
-		               String fsdom = DateUtil.extractDOM(fsd);
-		               String ssdom = DateUtil.extractDOM(ssd);
-		               String tsdom = DateUtil.extractDOM(tsd);
-		               String fosdom = DateUtil.extractDOM(fosd);
-		               String fisdom = DateUtil.extractDOM(fisd);
+                        String fsdom = DateUtil.extractDOM(fsd);
+                        String ssdom = DateUtil.extractDOM(ssd);
+                        String tsdom = DateUtil.extractDOM(tsd);
+                        String fosdom = DateUtil.extractDOM(fosd);
+                        String fisdom = DateUtil.extractDOM(fisd);
 
-		               extractDOMTTS(fsdom, ssdom, tsdom, fosdom, fisdom, result);
-		           }
+                        extractDOMTTS(fsdom, ssdom, tsdom, fosdom, fisdom, result);
+                    }
 
-		           computeFinalData();
-		           computeDOWTTSPercentage();
-		           computeDOMTTSPercentage();
-	           }
+                    computeFinalData();
+                    computeDOWTTSPercentage();
+                    computeDOMTTSPercentage();
+                }
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -495,7 +495,7 @@ public class DataLoader {
     }
 
     public List<DPSale> getDPSales() {
-    	loadDPSales();
+        loadDPSales();
 
         return Collections.unmodifiableList(dpSales);
     }
